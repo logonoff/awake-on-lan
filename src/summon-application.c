@@ -72,22 +72,21 @@ summon_application_about_action (GSimpleAction *action,
                                  GVariant      *parameter,
                                  gpointer       user_data)
 {
-	static const char *developers[] = {"logonoff <hello@logonoff.co>", NULL};
+	// static const char *developers[] = {"logonoff", NULL};
 	SummonApplication *self = user_data;
-	GtkWindow *window = NULL;
+	GtkWindow *window = gtk_application_get_active_window (GTK_APPLICATION (self));
+	AdwDialog *about;
 
 	g_assert (SUMMON_IS_APPLICATION (self));
 
-	window = gtk_application_get_active_window (GTK_APPLICATION (self));
+    about = adw_about_dialog_new_from_appdata (
+		"/co/logonoff/summon/metainfo",
+        PACKAGE_VERSION
+	);
 
-	adw_show_about_window (window,
-	                       "application-name", "summon",
-	                       "application-icon", "co.logonoff.summon",
-	                       "developer-name", "logonoff <hello@logonoff.co>",
-	                       "version", "0.1.0",
-	                       "developers", developers,
-	                       "copyright", "© 2024 logonoff <hello@logonoff.co>",
-	                       NULL);
+	adw_about_dialog_set_version (ADW_ABOUT_DIALOG (about), PACKAGE_VERSION);
+
+	adw_dialog_present (ADW_DIALOG (about), GTK_WIDGET (window));
 }
 
 static void

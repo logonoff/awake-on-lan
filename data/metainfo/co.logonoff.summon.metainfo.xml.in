@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+	<id>co.logonoff.summon</id>
+
+	<name>Summon</name>
+	<summary>Wake up computers using Wake-on-LAN</summary>
+
+	<metadata_license>CC-BY-4.0</metadata_license>
+	<project_license>GPL-3.0-or-later</project_license>
+
+	<description>
+		<p>No description</p>
+	</description>
+
+	<developer>
+		<name>logonoff</name>
+	</developer>
+
+	<url type="homepage">https://github.com/logonoff/summon</url>
+
+	<url type="bugtracker">https://github.com/logonoff/summon/issues</url>
+
+	<launchable type="desktop-id">co.logonoff.summon.desktop</launchable>
+
+	<icon type="stock">co.logonoff.summon</icon>
+
+	<categories>
+		<category>Network</category>
+		<category>RemoteAccess</category>
+	</categories>
+
+	<provides>
+		<binary>co.logonoff.summon</binary>
+	</provides>
+
+	<releases>
+		<release version="0.1.0" type="development">
+			<description>
+				<p>Initial release</p>
+			</description>
+		</release>
+	</releases>
+</component>

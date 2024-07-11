@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/co/logonoff/summon">
-    <file preprocess="xml-stripblanks">summon-window.ui</file>
-    <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">summon-window.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">gtk/help-overlay.ui</file>
   </gresource>
 </gresources>

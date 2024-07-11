@@ -30,7 +30,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "~/source/summon"
+                    "url" : "https://github.com/logonoff/summon.git",
+                    "branch" : "main"
                 }
             ]
         }

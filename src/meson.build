@@ -14,7 +14,10 @@ summon_sources += gnome.compile_resources('summon-resources',
   c_name: 'summon'
 )
 
-executable('summon', summon_sources,
+executable(
+  'summon',
+  appstream_src,
+  summon_sources,
   dependencies: summon_deps,
        install: true,
 )
