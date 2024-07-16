@@ -1,6 +1,4 @@
 data/co.logonoff.summon.desktop.in
-data/metainfo/co.logonoff.summon.metainfo.xml.in
+data/co.logonoff.summon.metainfo.xml.in
 data/co.logonoff.summon.gschema.xml
-src/main.c
-src/summon-window.c
-src/summon-window.ui
+src/window.ui
