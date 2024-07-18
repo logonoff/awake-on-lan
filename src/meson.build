@@ -1,3 +1,5 @@
+pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name()
+moduledir = pkgdatadir / 'summon'
 gnome = import('gnome')
 
 gnome.compile_resources('summon',
@@ -8,42 +10,29 @@ gnome.compile_resources('summon',
   dependencies: [appstream_file]
 )
 
+python = import('python')
+
+conf = configuration_data()
+conf.set('PYTHON', python.find_installation('python3').full_path())
+conf.set('VERSION', meson.project_version())
+conf.set('localedir', get_option('prefix') / get_option('localedir'))
+conf.set('pkgdatadir', pkgdatadir)
+
 configure_file(
-    input: 'config.rs.in',
-    output: 'config.rs',
-    configuration: conf
-)
-
-# Copy the config.rs output to the source directory.
-run_command(
-  'cp',
-  meson.project_build_root() / 'src' / 'config.rs',
-  meson.project_source_root() / 'src' / 'config.rs',
-  check: true
-)
-
-cargo_opt  = [ '--manifest-path', meson.project_source_root() / 'Cargo.toml' ]
-cargo_opt += [ '--target-dir', meson.project_build_root()  / 'src' ]
-cargo_env  = [ 'CARGO_HOME=' + meson.project_build_root()  / 'cargo-home' ]
-
-if get_option('buildtype') == 'release'
-  cargo_opt += [ '--release' ]
-  rust_target = 'release'
-else
-  rust_target = 'debug'
-endif
-
-cargo_build = custom_target(
-  'cargo-build',
-  build_by_default: true,
-  build_always_stale: true,
-  output: meson.project_name(),
-  console: true,
+  input: 'summon.in',
+  output: 'summon',
+  configuration: conf,
   install: true,
   install_dir: get_option('bindir'),
-  command: [
-    'env', cargo_env,
-    cargo_bin, 'build',
-    cargo_opt, '&&', 'cp', 'src' / rust_target / meson.project_name(), '@OUTPUT@',
-  ]
+  install_mode: 'r-xr-xr-x'
 )
+
+summon_sources = [
+  '__init__.py',
+  'main.py',
+  'window.py',
+  'wol_client.py',
+  'settings_manager.py',
+]
+
+install_data(summon_sources, install_dir: moduledir)

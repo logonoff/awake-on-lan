@@ -1,4 +1,0 @@
-{
-    "mesonbuild.configureOnOpen": true,
-    "C_Cpp.default.configurationProvider": "mesonbuild.mesonbuild"
-}
