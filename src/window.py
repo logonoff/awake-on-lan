@@ -53,6 +53,8 @@ class SummonWindow(Adw.ApplicationWindow):
         self.wol_clients = SettingsManager(base_path=XDG_CONFIG_HOME)
         self.wol_clients.load_settings()
 
+        self.remotes_list.get_style_context().add_class('boxed-list')
+
         for client in self.wol_clients.wol_clients:
             self.add_wol_client_to_list(client)
 
@@ -64,6 +66,7 @@ class SummonWindow(Adw.ApplicationWindow):
         new_row = Adw.ActionRow.new()
         new_row.set_title(wol_client.name)
         new_row.set_subtitle(wol_client.get_mac_address())
+        new_row.get_style_context().add_class('AdwActionRow')
 
         # create start button
         start_button = Gtk.Button.new_from_icon_name('media-playback-start-symbolic')
@@ -83,50 +86,78 @@ class SummonWindow(Adw.ApplicationWindow):
         dialog = Adw.Dialog.new()
 
         # set dialog title
-        dialog.set_title('Add new application')
+        dialog.set_title('Add new remote')
 
-        # create a new grid
-        grid = Gtk.Grid.new()
-        dialog.set_child(grid)
-
-        header = Adw.HeaderBar.new()
-        header.set_show_title(False)
-        header.get_style_context().add_class('flat')
-
-        grid.attach(header, 0, 0, 2, 1)
-
-        # create a new label
-        label = Gtk.Label(label='Name')
-        grid.attach(label, 0, 1, 1, 1)
-
-        # create a new entry
-        name_entry = Gtk.Entry()
-        grid.attach(name_entry, 1, 1, 1, 1)
-
-        # create a new label
-        label = Gtk.Label(label='MAC Address')
-        grid.attach(label, 0, 2, 1, 1)
-
-        def generate_wol_client():
-            return WolClient(mac_address=mac_entry.get_text(),
-                             name=name_entry.get_text())
-
-        # create a new entry
-        mac_entry = Gtk.Entry()
-        grid.attach(mac_entry, 1, 2, 1, 1)
-
-        # create a new button
-        add_button = Gtk.Button(label='Add')
+        # add button
+        add_button = Gtk.Button(label='Save')
         add_button.get_style_context().add_class('suggested-action')
-        grid.attach(add_button, 0, 3, 2, 1)
+        add_button.set_sensitive(False) # disable button until data valid
 
         def add_button_on_click():
             self.wol_clients.add_wol_client(generate_wol_client())
             self.add_wol_client_to_list(self.wol_clients.wol_clients[-1])
             dialog.close()
 
-        # connect the button to the dialog response signal
         add_button.connect('clicked', lambda _: add_button_on_click())
+
+        # cancel button
+        cancel_button = Gtk.Button(label='Cancel')
+        cancel_button.connect('clicked', lambda _: dialog.close())
+
+        # create a new grid
+        view = Adw.ToolbarView.new()
+        dialog.set_child(view)
+
+        header = Adw.HeaderBar.new()
+        header.set_show_title(True)
+        header.pack_start(cancel_button)
+        header.pack_end(add_button)
+        header.set_show_start_title_buttons(False)
+        header.set_show_end_title_buttons(False)
+        header.get_style_context().add_class('flat')
+
+        view.add_top_bar(header)
+
+        # create gtklistbox
+        listbox = Gtk.ListBox.new()
+        listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        listbox.get_style_context().add_class('boxed-list')
+
+        # add padding
+        listbox.set_margin_top(24)
+        listbox.set_margin_bottom(24)
+        listbox.set_margin_start(24)
+        listbox.set_margin_end(24)
+
+        view.set_content(listbox)
+
+        # create a new entry
+        name_entry = Adw.EntryRow.new()
+        name_entry.set_title('Name')
+        name_entry.connect('changed', lambda _:
+            add_button.set_sensitive(validate_entry()))
+        listbox.insert(name_entry, -1)
+
+        # create a new label
+        mac_entry = Adw.EntryRow.new()
+        mac_entry.set_title('MAC address')
+        mac_entry.connect('changed', lambda _:
+            add_button.set_sensitive(validate_entry()))
+        listbox.insert(mac_entry, -1)
+
+        # create a new label
+        port_entry = Adw.SpinRow.new_with_range(0, 65535, 1)
+        port_entry.set_title('Port number')
+        port_entry.set_value(9)
+        listbox.insert(port_entry, -1)
+
+        def generate_wol_client():
+            return WolClient(mac_address=mac_entry.get_text(),
+                             name=name_entry.get_text(),
+                             port=port_entry.get_value())
+
+        def validate_entry():
+            return name_entry.get_text() and WolClient.is_valid_mac_address(mac_entry.get_text())
 
         # destroy the dialog
         dialog.present(self)

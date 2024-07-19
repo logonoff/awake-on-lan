@@ -45,6 +45,12 @@ class WolClient:
         """Initialize a WolClient object from a JSON string."""
         return WolClient(**json.loads(json_str))
 
+    @staticmethod
+    def is_valid_mac_address(mac_address: str) -> bool:
+        """Check if a MAC address is valid."""
+        cleaned = ''.join(char for char in mac_address if char.isalnum())
+        return len(cleaned) == 12 and all(char in '0123456789abcdefABCDEF' for char in cleaned)
+
     def get_mac_address(self) -> str:
         """Get a friendly string representation of the MAC address."""
         mac = self.mac_address.hex()

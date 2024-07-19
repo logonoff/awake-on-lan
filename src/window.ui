@@ -45,8 +45,6 @@
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkListBox" id="remotes_list">
-                        <property name="valign">start</property>
-                        <property name="visible">True</property>
                         <property name="selection-mode">none</property>
                         <style>
                           <class name="boxed-list" />
@@ -65,10 +63,10 @@
   </template>
   <menu id="primary_menu">
     <section>
-      <item>
+      <!-- <item>
         <attribute name="label" translatable="yes">_Preferences</attribute>
         <attribute name="action">app.preferences</attribute>
-      </item>
+      </item> -->
       <item>
         <attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
         <attribute name="action">win.show-help-overlay</attribute>
