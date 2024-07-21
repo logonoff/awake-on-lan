@@ -12,7 +12,6 @@
             <child type="start">
               <object class="GtkButton" id="cancel_button">
                 <property name="label" translatable="yes">Cancel</property>
-                <signal name="clicked" handler="cancel_button_on_click" swapped="no" />
               </object>
             </child>
 
@@ -35,7 +34,7 @@
         </child>
 
         <property name="content">
-          <object class="GtkListBox">
+          <object class="GtkListBox" id="content">
             <style>
               <class name="boxed-list" />
             </style>

@@ -23,6 +23,9 @@ from .wol_client import WolClient
 
 @Gtk.Template(resource_path='/co/logonoff/summon/add_dialog.ui')
 class AddDialogBox(Adw.Dialog):
+    """Dialog box to add a new WolClient. Note that the add function is bring
+    your own (to avoid a circular import)."""
+
     __gtype_name__ = 'AddDialogBox'
 
     header: Adw.HeaderBar = Gtk.Template.Child()
@@ -31,6 +34,7 @@ class AddDialogBox(Adw.Dialog):
     port_entry: Adw.SpinRow = Gtk.Template.Child()
     add_button: Gtk.Button = Gtk.Template.Child()
     cancel_button: Gtk.Button = Gtk.Template.Child()
+    content: Gtk.ListBox = Gtk.Template.Child()
 
     parent: Adw.ApplicationWindow
 
@@ -39,7 +43,7 @@ class AddDialogBox(Adw.Dialog):
 
         self.parent = parent
 
-        self.cancel_button.connect('clicked', self.cancel_button_on_click)
+        self.cancel_button.connect('clicked', lambda _: self.close())
 
         self.add_button.set_sensitive(False)
         self.add_button.get_style_context().add_class('suggested-action')
@@ -47,15 +51,17 @@ class AddDialogBox(Adw.Dialog):
         self.name_entry.connect('changed', lambda _: self.validate_entry())
         self.mac_entry.connect('changed', lambda _: self.validate_entry())
 
-    def generate_wol_client(self):
+        self.content.get_style_context().add_class('boxed-list')
+
+    def generate_wol_client(self) -> WolClient:
+        """Return a new WolClient object with the data from the dialog."""
         return WolClient(mac_address=self.mac_entry.get_text(),
                          name=self.name_entry.get_text(),
                          port=self.port_entry.get_value())
 
     def validate_entry(self):
         """Validate the entry fields and enable the add button if valid."""
-        self.add_button.set_sensitive(self.name_entry.get_text() and WolClient.is_valid_mac_address(self.mac_entry.get_text()))
-
-    def cancel_button_on_click(self, action):
-        """Close the dialog."""
-        self.close()
+        self.add_button.set_sensitive(
+            self.name_entry.get_text()
+            and WolClient.is_valid_mac_address(self.mac_entry.get_text())
+        )

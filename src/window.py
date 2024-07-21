@@ -20,16 +20,18 @@
 import os
 from gi.repository import Adw
 from gi.repository import Gtk
-from .settings_manager import SettingsManager
 from .add_dialog import AddDialogBox
+from .settings_manager import SettingsManager
 
 @Gtk.Template(resource_path='/co/logonoff/summon/window.ui')
 class SummonWindow(Adw.ApplicationWindow):
+    """Main application window."""
     __gtype_name__ = 'SummonWindow'
 
     add_button: Gtk.Button = Gtk.Template.Child()
     remotes_list: Gtk.ListBox = Gtk.Template.Child()
-    no_items = Gtk.Template.Child()
+    no_items: Adw.StatusPage = Gtk.Template.Child()
+    toaster: Adw.ToastOverlay = Gtk.Template.Child()
     wol_clients: SettingsManager
 
     def __init__(self, **kwargs):
@@ -42,10 +44,19 @@ class SummonWindow(Adw.ApplicationWindow):
 
         self.remotes_list.get_style_context().add_class('boxed-list')
 
-        for client in self.wol_clients.wol_clients:
-            self.add_wol_client_to_list(client)
+        self.get_application().create_action(
+            'add', lambda *_: self.spawn_add_remote_dialog(None), ['<primary>n']
+        )
 
-    def add_wol_client_to_list(self, wol_client):
+        self.get_application().create_action(
+            'view-config', lambda *_: os.system(f'xdg-open {self.wol_clients.settings_file}'), ['<primary>m']
+        )
+
+        for client in self.wol_clients.wol_clients:
+            self._add_wol_client_to_list(client)
+
+
+    def _add_wol_client_to_list(self, wol_client):
         """Add a new WolClient to the list and update the view."""
         self.no_items.hide()
 
@@ -60,20 +71,25 @@ class SummonWindow(Adw.ApplicationWindow):
         start_button.get_style_context().add_class('flat')
 
         new_row.add_suffix(start_button)
-        start_button.connect('clicked', lambda _: wol_client.send_magic_packet())
+        start_button.connect('clicked', lambda _: (
+            wol_client.send_magic_packet(),
+            self.toaster.add_toast(Adw.Toast.new(f'Sent magic packet to {wol_client.name}'))
+        ))
 
         self.remotes_list.insert(new_row, -1)
 
 
     @Gtk.Template.Callback()
-    def summon_application_add_action(self, action):
+    def spawn_add_remote_dialog(self, action):
+        """Open the add dialog when the add button is clicked."""
         dialog = AddDialogBox(parent=self)
 
         def add_button_on_click():
             new_client = dialog.generate_wol_client()
             self.wol_clients.add_wol_client(new_client)
-            self.add_wol_client_to_list(new_client)
+            self._add_wol_client_to_list(new_client)
             dialog.close()
+            self.toaster.add_toast(Adw.Toast.new('Remote added'))
 
         dialog.add_button.connect('clicked', lambda _: add_button_on_click())
 

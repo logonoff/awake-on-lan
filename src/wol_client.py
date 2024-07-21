@@ -38,23 +38,27 @@ class WolClient:
             self.mac_address = mac_address
 
         self.name = name
-        self.port = port
+        self.port = int(port)
+
 
     @staticmethod
     def init_from_json(json_str: str):
-        """Initialize a WolClient object from a JSON string."""
+        """Initialize a new WolClient object from a JSON string."""
         return WolClient(**json.loads(json_str))
+
 
     @staticmethod
     def is_valid_mac_address(mac_address: str) -> bool:
-        """Check if a MAC address is valid."""
+        """Check if a MAC address is valid for usage in the __init__ method."""
         cleaned = ''.join(char for char in mac_address if char.isalnum())
         return len(cleaned) == 12 and all(char in '0123456789abcdefABCDEF' for char in cleaned)
+
 
     def get_mac_address(self) -> str:
         """Get a friendly string representation of the MAC address."""
         mac = self.mac_address.hex()
         return ':'.join(mac[i:i+2] for i in range(0, len(mac), 2))
+
 
     def send_magic_packet(self):
         """Send a Wake-on-LAN magic packet to the specified MAC address.
@@ -67,8 +71,10 @@ class WolClient:
         s.sendto(magic, ("<broadcast>", self.port))
         s.close()
 
+
     def __eq__(self, other):
         return self.mac_address == other.mac_address
+
 
     def __str__(self):
         return json.dumps({

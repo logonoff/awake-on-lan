@@ -21,6 +21,7 @@ import os
 from .wol_client import WolClient
 
 class SettingsManager:
+    """Settings and configuration manager for the application."""
     wol_clients: list[WolClient]
     settings_path: str
 
