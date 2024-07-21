@@ -23,12 +23,12 @@ from .wol_client import WolClient
 class SettingsManager:
     """Settings and configuration manager for the application."""
     wol_clients: list[WolClient]
-    settings_path: str
+    settings_file: str
 
 
     def __init__(self, base_path: str):
         self.wol_clients = []
-        self.settings_file = f'{base_path}/co.logonoff.summon.settings.json'
+        self.settings_file = f'{base_path}/co.logonoff.summon.settings.txt'
 
 
     def save_settings(self):
@@ -42,7 +42,7 @@ class SettingsManager:
         """Load the settings from the settings file."""
         try:
             with open(self.settings_file, 'r', encoding='utf-8') as f:
-                self.wol_clients = [WolClient.init_from_json(line) for line in f]
+                self.wol_clients = [WolClient.init_from_json(line) for line in f if line.strip()]
         except FileNotFoundError:
             print(f'Settings file not found, creating a new one at {self.settings_file}')
             os.makedirs(os.path.dirname(self.settings_file), exist_ok=True)

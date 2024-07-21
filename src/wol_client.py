@@ -79,5 +79,6 @@ class WolClient:
     def __str__(self):
         return json.dumps({
             'mac_address': self.get_mac_address(),
-            'name': self.name
+            'name': self.name,
+            'port': self.port
         })

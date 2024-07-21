@@ -34,11 +34,21 @@
                     <property name="menu-model">primary_menu</property>
                   </object>
                 </child>
-
               </object>
             </child>
-            <property name="content">
 
+            <!-- <child type="top">
+              <object class="AdwClamp">
+                <property name="child">
+                  <object class="GtkSearchEntry" id="search_entry">
+                    <property name="placeholder-text" translatable="yes">Search remotes</property>
+                    <signal name="search-changed" handler="search_changed" swapped="no" />
+                  </object>
+                </property>
+              </object>
+            </child> -->
+
+            <property name="content">
               <object class="GtkScrolledWindow">
                 <property name="hscrollbar-policy">never</property>
                 <property name="min-content-height">420</property>
@@ -53,6 +63,7 @@
                         <property name="margin-end">12</property>
                         <property name="spacing">12</property>
                         <property name="orientation">vertical</property>
+
                         <child>
                           <object class="GtkListBox" id="remotes_list">
                             <property name="selection-mode">none</property>
