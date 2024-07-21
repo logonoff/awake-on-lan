@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0" />
+  <requires lib="Adw" version="1.5" />
+  <template class="AddDialogBox" parent="AdwDialog">
+    <property name="title" translatable="yes">Add a new remote</property>
+
+    <child>
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar" id="header">
+            <child type="start">
+              <object class="GtkButton" id="cancel_button">
+                <property name="label" translatable="yes">Cancel</property>
+                <signal name="clicked" handler="cancel_button_on_click" swapped="no" />
+              </object>
+            </child>
+
+            <child type="end">
+              <object class="GtkButton" id="add_button">
+                <property name="label" translatable="yes">Save</property>
+
+                <style>
+                  <class name="suggested-action" />
+                </style>
+              </object>
+            </child>
+
+            <style>
+              <class name="flat" />
+            </style>
+            <property name="show-start-title-buttons">False</property>
+            <property name="show-end-title-buttons">False</property>
+          </object>
+        </child>
+
+        <property name="content">
+          <object class="GtkListBox">
+            <style>
+              <class name="boxed-list" />
+            </style>
+            <property name="selection-mode">none</property>
+            <property name="margin-top">24</property>
+            <property name="margin-bottom">24</property>
+            <property name="margin-start">24</property>
+            <property name="margin-end">24</property>
+
+            <child>
+              <object class="AdwEntryRow" id="name_entry">
+                <property name="title" translatable="yes">Name</property>
+                <signal name="changed" handler="validate_entry" swapped="no" />
+              </object>
+            </child>
+
+            <child>
+              <object class="AdwEntryRow" id="mac_entry">
+                <property name="title" translatable="yes">MAC Address</property>
+                <signal name="changed" handler="validate_entry" swapped="no" />
+              </object>
+            </child>
+
+            <child>
+              <object class="AdwSpinRow" id="port_entry">
+                <property name="title" translatable="yes">Port</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">1</property>
+                    <property name="upper">65535</property>
+                    <property name="value">9</property>
+                    <property name="step-increment">1</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+
+        </property>
+      </object>
+    </child>
+  </template>
+</interface>

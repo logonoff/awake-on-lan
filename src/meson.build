@@ -31,6 +31,7 @@ summon_sources = [
   '__init__.py',
   'main.py',
   'window.py',
+  'add_dialog.py',
   'wol_client.py',
   'settings_manager.py',
 ]
