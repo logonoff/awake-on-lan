@@ -32,6 +32,7 @@ class SummonWindow(Adw.ApplicationWindow):
     remotes_list: Gtk.ListBox = Gtk.Template.Child()
     no_items: Adw.StatusPage = Gtk.Template.Child()
     toaster: Adw.ToastOverlay = Gtk.Template.Child()
+    content_box: Gtk.Box = Gtk.Template.Child()
     wol_clients: SettingsManager
 
     def __init__(self, **kwargs):
@@ -56,9 +57,19 @@ class SummonWindow(Adw.ApplicationWindow):
             self._add_wol_client_to_list(client)
 
 
+    def _show_no_items(self, show: bool):
+        """Show or hide the no items page."""
+        if show:
+            self.no_items.show()
+            self.content_box.set_valign(Gtk.Align.CENTER)
+        else:
+            self.no_items.hide()
+            self.content_box.set_valign(Gtk.Align.FILL)
+
+
     def _add_wol_client_to_list(self, wol_client):
         """Add a new WolClient to the list and update the view."""
-        self.no_items.hide()
+        self._show_no_items(False)
 
         new_row = Adw.ActionRow.new()
         new_row.set_title(wol_client.name)
