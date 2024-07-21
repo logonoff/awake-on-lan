@@ -17,6 +17,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from typing import Callable
 from gi.repository import Adw
 from gi.repository import Gtk
 from .wol_client import WolClient
@@ -38,20 +39,29 @@ class AddDialogBox(Adw.Dialog):
 
     parent: Adw.ApplicationWindow
 
-    def __init__(self, parent, **kwargs):
+    def __init__(self, add_function: Callable[[WolClient], None], **kwargs):
         super().__init__(**kwargs)
 
-        self.parent = parent
+        def add_if_valid():
+            if self.is_valid_entry():
+                add_function(self.generate_wol_client())
+                self.close()
 
         self.cancel_button.connect('clicked', lambda _: self.close())
 
         self.add_button.set_sensitive(False)
         self.add_button.get_style_context().add_class('suggested-action')
+        self.add_button.connect('clicked', lambda _: add_if_valid())
 
         self.name_entry.connect('changed', lambda _: self.validate_entry())
         self.mac_entry.connect('changed', lambda _: self.validate_entry())
 
+        self.name_entry.connect('apply', lambda _: add_if_valid())
+        self.mac_entry.connect('apply', lambda _: add_if_valid())
+        self.name_entry.connect('apply', lambda _: add_if_valid())
+
         self.content.get_style_context().add_class('boxed-list')
+
 
     def generate_wol_client(self) -> WolClient:
         """Return a new WolClient object with the data from the dialog."""
@@ -59,9 +69,10 @@ class AddDialogBox(Adw.Dialog):
                          name=self.name_entry.get_text(),
                          port=self.port_entry.get_value())
 
+    def is_valid_entry(self) -> bool:
+        """Return True if the entry fields are valid."""
+        return self.name_entry.get_text() and WolClient.is_valid_mac_address(self.mac_entry.get_text())
+
     def validate_entry(self):
         """Validate the entry fields and enable the add button if valid."""
-        self.add_button.set_sensitive(
-            self.name_entry.get_text()
-            and WolClient.is_valid_mac_address(self.mac_entry.get_text())
-        )
+        self.add_button.set_sensitive(self.is_valid_entry())

@@ -93,15 +93,12 @@ class SummonWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def spawn_add_remote_dialog(self, action):
         """Open the add dialog when the add button is clicked."""
-        dialog = AddDialogBox(parent=self)
-
-        def add_button_on_click():
-            new_client = dialog.generate_wol_client()
+        def add_button_on_click(new_client):
             self.wol_clients.add_wol_client(new_client)
             self._add_wol_client_to_list(new_client)
-            dialog.close()
             self.toaster.add_toast(Adw.Toast.new('Remote added'))
 
-        dialog.add_button.connect('clicked', lambda _: add_button_on_click())
+        dialog = AddDialogBox(add_function=add_button_on_click)
 
         dialog.present(self)
+        dialog.name_entry.grab_focus()
