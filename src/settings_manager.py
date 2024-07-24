@@ -53,8 +53,15 @@ class SettingsManager:
         self.wol_clients.append(client)
         self.save_settings()
 
-
-    def remove_wol_client(self, client: WolClient):
-        """Remove a WolClient from the list and save the settings."""
-        self.wol_clients.remove(client)
+    def add_wol_client_at_position(self, client: WolClient, position: int):
+        """Add a new WolClient to the list at a specific position and save the settings."""
+        self.wol_clients.insert(position, client)
         self.save_settings()
+
+    def remove_wol_client(self, client: WolClient) -> int:
+        """Remove a WolClient from the list and save the settings
+        Returns the index of the removed client."""
+        position = self.wol_clients.index(client)
+        del self.wol_clients[position]
+        self.save_settings()
+        return position

@@ -76,16 +76,38 @@ class SummonWindow(Adw.ApplicationWindow):
         new_row.set_subtitle(wol_client.get_mac_address())
         new_row.get_style_context().add_class('AdwActionRow')
 
+        # delete button
+        delete_button = Gtk.Button.new_from_icon_name('edit-delete-symbolic')
+        delete_button.set_tooltip_text('Delete')
+        delete_button.get_style_context().add_class('flat')
+
+        def delete_button_on_click():
+            position = self.wol_clients.remove_wol_client(wol_client)
+            deleted_toast = Adw.Toast.new(f'{wol_client.name} removed')
+            deleted_toast.set_button_label('Undo')
+            deleted_toast.connect('button-clicked', lambda _: (
+                self.wol_clients.add_wol_client_at_position(wol_client, position),
+                self.remotes_list.insert(new_row, position),
+            ))
+            self.remotes_list.remove(new_row)
+            self.toaster.add_toast(deleted_toast)
+
+        delete_button.connect('clicked', lambda _: delete_button_on_click())
+
+        new_row.add_suffix(delete_button)
+
         # create start button
         start_button = Gtk.Button.new_from_icon_name('media-playback-start-symbolic')
         start_button.set_tooltip_text('Start')
         start_button.get_style_context().add_class('flat')
 
-        new_row.add_suffix(start_button)
         start_button.connect('clicked', lambda _: (
             wol_client.send_magic_packet(),
             self.toaster.add_toast(Adw.Toast.new(f'Sent magic packet to {wol_client.name}'))
         ))
+
+        new_row.add_suffix(start_button)
+
 
         self.remotes_list.insert(new_row, -1)
 
