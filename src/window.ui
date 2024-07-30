@@ -99,7 +99,7 @@
         <attribute name="action">app.preferences</attribute>
       </item> -->
       <item>
-        <attribute name="label" translatable="yes">View config file</attribute>
+        <attribute name="label" translatable="yes">View Config File</attribute>
         <attribute name="action">app.view-config</attribute>
       </item>
       <item>
