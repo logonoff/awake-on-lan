@@ -1,1 +1,1 @@
-i18n.gettext('summon', preset: 'glib')
+i18n.gettext('awakeonlan', preset: 'glib')

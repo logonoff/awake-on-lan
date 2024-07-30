@@ -24,14 +24,14 @@ gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
 from gi.repository import Gtk, Gio, Adw
-from .window import SummonWindow
+from .window import awakeonlanWindow
 
 
-class SummonApplication(Adw.Application):
+class awakeonlanApplication(Adw.Application):
     """The main application singleton class."""
 
     def __init__(self):
-        super().__init__(application_id='co.logonoff.summon',
+        super().__init__(application_id='co.logonoff.awakeonlan',
                          flags=Gio.ApplicationFlags.DEFAULT_FLAGS)
         self.create_action('quit', lambda *_: self.quit(), ['<primary>q', '<primary>w'])
         self.create_action('about', self.on_about_action)
@@ -45,7 +45,7 @@ class SummonApplication(Adw.Application):
         """
         win = self.props.active_window
         if not win:
-            win = SummonWindow(application=self)
+            win = awakeonlanWindow(application=self)
         win.present()
 
     def on_about_action(self, widget, _):
@@ -76,5 +76,5 @@ class SummonApplication(Adw.Application):
 
 def main(version):
     """The application's entry point."""
-    app = SummonApplication()
+    app = awakeonlanApplication()
     return app.run(sys.argv)

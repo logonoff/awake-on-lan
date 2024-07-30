@@ -1,4 +1,4 @@
-application_id = 'co.logonoff.summon'
+application_id = 'co.logonoff.awakeonlan'
 
 scalable_dir = 'hicolor' / 'scalable' / 'apps'
 install_data(

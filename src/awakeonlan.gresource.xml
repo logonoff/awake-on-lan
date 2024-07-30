@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/co/logonoff/summon">
+  <gresource prefix="/co/logonoff/awakeonlan">
     <file preprocess="xml-stripblanks" compressed="true">window.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">add_dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">gtk/help-overlay.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true" alias="metainfo">../data/co.logonoff.summon.metainfo.xml</file>
+    <file preprocess="xml-stripblanks" compressed="true" alias="metainfo">../data/co.logonoff.awakeonlan.metainfo.xml</file>
   </gresource>
 </gresources>

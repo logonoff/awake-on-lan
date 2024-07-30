@@ -23,10 +23,10 @@ from gi.repository import Gtk
 from .add_dialog import AddDialogBox
 from .settings_manager import SettingsManager
 
-@Gtk.Template(resource_path='/co/logonoff/summon/window.ui')
-class SummonWindow(Adw.ApplicationWindow):
+@Gtk.Template(resource_path='/co/logonoff/awakeonlan/window.ui')
+class awakeonlanWindow(Adw.ApplicationWindow):
     """Main application window."""
-    __gtype_name__ = 'SummonWindow'
+    __gtype_name__ = 'awakeonlanWindow'
 
     add_button: Gtk.Button = Gtk.Template.Child()
     remotes_list: Gtk.ListBox = Gtk.Template.Child()
@@ -37,6 +37,8 @@ class SummonWindow(Adw.ApplicationWindow):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+        self.set_title('Awake on Lan')
 
         XDG_CONFIG_HOME = os.getenv('XDG_CONFIG_HOME', os.path.expanduser('~/.config'))
 

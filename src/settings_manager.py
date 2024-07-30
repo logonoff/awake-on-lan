@@ -28,7 +28,7 @@ class SettingsManager:
 
     def __init__(self, base_path: str):
         self.wol_clients = []
-        self.settings_file = f'{base_path}/co.logonoff.summon.settings.txt'
+        self.settings_file = f'{base_path}/co.logonoff.awakeonlan.settings.txt'
 
 
     def save_settings(self):
@@ -42,10 +42,16 @@ class SettingsManager:
         """Load the settings from the settings file."""
         try:
             with open(self.settings_file, 'r', encoding='utf-8') as f:
-                self.wol_clients = [WolClient.init_from_json(line) for line in f if line.strip()]
+                for line in f:
+                    if line.strip() and not line.startswith('#'):
+                        try:
+                            self.wol_clients.append(WolClient.init_from_json(line))
+                        except Exception as e:  # ignore bad user input
+                            print(f'Error loading client from settings file: {line} - {e}')
         except FileNotFoundError:
             print(f'Settings file not found, creating a new one at {self.settings_file}')
-            os.makedirs(os.path.dirname(self.settings_file), exist_ok=True)
+            with open(self.settings_file, 'w', encoding='utf-8') as f:
+                f.write('')
 
 
     def add_wol_client(self, client: WolClient):
@@ -53,10 +59,12 @@ class SettingsManager:
         self.wol_clients.append(client)
         self.save_settings()
 
+
     def add_wol_client_at_position(self, client: WolClient, position: int):
         """Add a new WolClient to the list at a specific position and save the settings."""
         self.wol_clients.insert(position, client)
         self.save_settings()
+
 
     def remove_wol_client(self, client: WolClient) -> int:
         """Remove a WolClient from the list and save the settings

@@ -1,7 +1,7 @@
 [Desktop Entry]
-Name=Summon
-Exec=summon
-Icon=co.logonoff.summon
+Name=Awake on Lan
+Exec=awakeonlan
+Icon=co.logonoff.awakeonlan
 Terminal=false
 Type=Network
 Categories=RemoteAccess;

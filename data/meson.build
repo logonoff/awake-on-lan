@@ -1,6 +1,6 @@
 desktop_file = i18n.merge_file(
-        input: 'co.logonoff.summon.desktop.in',
-       output: 'co.logonoff.summon.desktop',
+        input: 'co.logonoff.awakeonlan.desktop.in',
+       output: 'co.logonoff.awakeonlan.desktop',
          type: 'desktop',
        po_dir: '../po',
       install: true,
@@ -13,8 +13,8 @@ if desktop_utils.found()
 endif
 
 appstream_file = i18n.merge_file(
-        input: 'co.logonoff.summon.metainfo.xml.in',
-       output: 'co.logonoff.summon.metainfo.xml',
+        input: 'co.logonoff.awakeonlan.metainfo.xml.in',
+       output: 'co.logonoff.awakeonlan.metainfo.xml',
        po_dir: '../po',
       install: true,
   install_dir: get_option('datadir') / 'metainfo'
@@ -24,7 +24,7 @@ appstreamcli = find_program('appstreamcli', required: false, disabler: true)
 test('Validate appstream file', appstreamcli,
      args: ['validate', '--no-net', '--explain', appstream_file])
 
-install_data('co.logonoff.summon.gschema.xml',
+install_data('co.logonoff.awakeonlan.gschema.xml',
   install_dir: get_option('datadir') / 'glib-2.0' / 'schemas'
 )
 

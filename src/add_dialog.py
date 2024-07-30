@@ -22,7 +22,7 @@ from gi.repository import Adw
 from gi.repository import Gtk
 from .wol_client import WolClient
 
-@Gtk.Template(resource_path='/co/logonoff/summon/add_dialog.ui')
+@Gtk.Template(resource_path='/co/logonoff/awakeonlan/add_dialog.ui')
 class AddDialogBox(Adw.Dialog):
     """Dialog box to add a new WolClient. Note that the add function is bring
     your own (to avoid a circular import)."""

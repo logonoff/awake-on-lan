@@ -1,9 +1,9 @@
 {
-    "id" : "co.logonoff.summon",
+    "id" : "co.logonoff.awakeonlan",
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
-    "command" : "summon",
+    "command" : "awakeonlan",
     "finish-args" : [
         "--share=network",
         "--share=ipc",
@@ -24,13 +24,13 @@
     ],
     "modules" : [
         {
-            "name" : "summon",
+            "name" : "awakeonlan",
             "builddir" : true,
             "buildsystem" : "meson",
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://github.com/logonoff/summon.git",
+                    "url" : "https://github.com/logonoff/awakeonlan.git",
                     "branch" : "main"
                 }
             ]

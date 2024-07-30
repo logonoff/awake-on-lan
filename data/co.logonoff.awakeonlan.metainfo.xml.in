@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-	<id>co.logonoff.summon</id>
+	<id>co.logonoff.awakeonlan</id>
 
-	<name>Summon</name>
+	<name>Awake on Lan</name>
 	<summary>Wake up computers using Wake-on-LAN</summary>
 
 	<metadata_license>CC-BY-4.0</metadata_license>
@@ -16,13 +16,13 @@
 		<name>logonoff</name>
 	</developer>
 
-	<url type="homepage">https://github.com/logonoff/summon</url>
+	<url type="homepage">https://github.com/logonoff/awakeonlan</url>
 
-	<url type="bugtracker">https://github.com/logonoff/summon/issues</url>
+	<url type="bugtracker">https://github.com/logonoff/awakeonlan/issues</url>
 
-	<launchable type="desktop-id">co.logonoff.summon.desktop</launchable>
+	<launchable type="desktop-id">co.logonoff.awakeonlan.desktop</launchable>
 
-	<icon type="stock">co.logonoff.summon</icon>
+	<icon type="stock">co.logonoff.awakeonlan</icon>
 
 	<categories>
 		<category>Network</category>
@@ -30,7 +30,7 @@
 	</categories>
 
 	<provides>
-		<binary>co.logonoff.summon</binary>
+		<binary>co.logonoff.awakeonlan</binary>
 	</provides>
 
 	<releases>
