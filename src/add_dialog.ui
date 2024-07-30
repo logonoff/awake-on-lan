@@ -3,7 +3,7 @@
   <requires lib="gtk" version="4.0" />
   <requires lib="Adw" version="1.5" />
   <template class="AddDialogBox" parent="AdwDialog">
-    <property name="title" translatable="yes">Add a new remote</property>
+    <property name="title" translatable="yes">New Remote</property>
 
     <child>
       <object class="AdwToolbarView">
