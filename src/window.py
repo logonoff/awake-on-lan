@@ -38,7 +38,7 @@ class awakeonlanWindow(Adw.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.set_title('Awake on Lan')
+        self.set_title('Awake on LAN')
 
         XDG_CONFIG_HOME = os.getenv('XDG_CONFIG_HOME', os.path.expanduser('~/.config'))
 

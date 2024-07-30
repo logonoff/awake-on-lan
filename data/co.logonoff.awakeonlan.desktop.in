@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Awake on Lan
+Name=Awake on LAN
 Exec=awakeonlan
 Icon=co.logonoff.awakeonlan
 Terminal=false

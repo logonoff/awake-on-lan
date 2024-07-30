@@ -2,7 +2,7 @@
 <component type="desktop-application">
 	<id>co.logonoff.awakeonlan</id>
 
-	<name>Awake on Lan</name>
+	<name>Awake on LAN</name>
 	<summary>Wake up computers using Wake-on-LAN</summary>
 
 	<metadata_license>CC-BY-4.0</metadata_license>

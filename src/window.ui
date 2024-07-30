@@ -107,7 +107,7 @@
         <attribute name="action">win.show-help-overlay</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">About Awake on Lan</attribute>
+        <attribute name="label" translatable="yes">About Awake on LAN</attribute>
         <attribute name="action">app.about</attribute>
       </item>
     </section>
