@@ -24,13 +24,13 @@
     ],
     "modules" : [
         {
-            "name" : "awakeonlan",
+            "name" : "awake-on-lan",
             "builddir" : true,
             "buildsystem" : "meson",
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://github.com/logonoff/awakeonlan.git",
+                    "url" : "https://github.com/logonoff/awake-on-lan.git",
                     "branch" : "main"
                 }
             ]
