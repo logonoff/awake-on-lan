@@ -77,6 +77,55 @@ class awakeonlanWindow(Adw.ApplicationWindow):
         new_row.set_title(wol_client.name)
         new_row.set_subtitle(wol_client.get_mac_address())
         new_row.get_style_context().add_class('AdwActionRow')
+        new_row.set_activatable(True)
+
+        # kebab button (edit)
+        kebab_button = Gtk.Button.new_from_icon_name('view-more')
+        kebab_button.set_tooltip_text('Edit')
+        kebab_button.get_style_context().add_class('flat')
+
+        kebab_button.connect('clicked', lambda _: self.spawn_edit_remote_dialog(wol_client, new_row))
+
+        new_row.set_activatable_widget(kebab_button)
+        new_row.add_suffix(kebab_button)
+
+        # create start button
+        start_button = Gtk.Button.new_from_icon_name('media-playback-start-symbolic')
+        start_button.set_tooltip_text('Start')
+        start_button.get_style_context().add_class('flat')
+
+        start_button.connect('clicked', lambda _: (
+            wol_client.send_magic_packet(),
+            self.toaster.add_toast(Adw.Toast.new(f'Sent magic packet to {wol_client.name}'))
+        ))
+
+        new_row.add_suffix(start_button)
+
+        self.remotes_list.insert(new_row, -1)
+
+
+    @Gtk.Template.Callback()
+    def spawn_add_remote_dialog(self, action):
+        """Open the add dialog when the add button is clicked."""
+        def add_button_on_click(new_client):
+            self.wol_clients.add_wol_client(new_client)
+            self._add_wol_client_to_list(new_client)
+            self.toaster.add_toast(Adw.Toast.new('Remote added'))
+
+        dialog = AddDialogBox(add_function=add_button_on_click)
+
+        dialog.present(self)
+        dialog.name_entry.grab_focus()
+
+    def spawn_edit_remote_dialog(self, wol_client, new_row):
+        """Open the add dialog when the add button is clicked."""
+        def add_button_on_click(new_client):
+            wol_client.name = new_client.name
+            wol_client.mac_address = new_client.mac_address
+            wol_client.port = new_client.port
+            new_row.set_title(wol_client.name)
+            new_row.set_subtitle(wol_client.get_mac_address())
+            self.toaster.add_toast(Adw.Toast.new('Remote edited'))
 
         # delete button
         delete_button = Gtk.Button.new_from_icon_name('edit-delete-symbolic')
@@ -94,35 +143,22 @@ class awakeonlanWindow(Adw.ApplicationWindow):
             self.remotes_list.remove(new_row)
             self.toaster.add_toast(deleted_toast)
 
-        delete_button.connect('clicked', lambda _: delete_button_on_click())
-
-        new_row.add_suffix(delete_button)
-
-        # create start button
-        start_button = Gtk.Button.new_from_icon_name('media-playback-start-symbolic')
-        start_button.set_tooltip_text('Start')
-        start_button.get_style_context().add_class('flat')
-
-        start_button.connect('clicked', lambda _: (
-            wol_client.send_magic_packet(),
-            self.toaster.add_toast(Adw.Toast.new(f'Sent magic packet to {wol_client.name}'))
-        ))
-
-        new_row.add_suffix(start_button)
-
-
-        self.remotes_list.insert(new_row, -1)
-
-
-    @Gtk.Template.Callback()
-    def spawn_add_remote_dialog(self, action):
-        """Open the add dialog when the add button is clicked."""
-        def add_button_on_click(new_client):
-            self.wol_clients.add_wol_client(new_client)
-            self._add_wol_client_to_list(new_client)
-            self.toaster.add_toast(Adw.Toast.new('Remote added'))
+        # adw computer icon
+        icon = Adw.StatusPage.new()
+        icon.set_icon_name('computer')
 
         dialog = AddDialogBox(add_function=add_button_on_click)
+        dialog.cancel_button.connect('clicked', lambda _: delete_button_on_click())
+        dialog.cancel_button.set_label('Delete')
+        dialog.cancel_button.get_style_context().add_class('destructive-action')
+
+        dialog.content_box.prepend(icon)
+
+        dialog.set_title('Edit Remote')
+
+        dialog.name_entry.set_text(wol_client.name)
+        dialog.mac_entry.set_text(wol_client.get_mac_address())
+        dialog.port_entry.set_text(str(wol_client.port))
 
         dialog.present(self)
         dialog.name_entry.grab_focus()

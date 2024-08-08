@@ -36,6 +36,7 @@ class AddDialogBox(Adw.Dialog):
     add_button: Gtk.Button = Gtk.Template.Child()
     cancel_button: Gtk.Button = Gtk.Template.Child()
     content: Gtk.ListBox = Gtk.Template.Child()
+    content_box: Gtk.Box = Gtk.Template.Child()
 
     parent: Adw.ApplicationWindow
 

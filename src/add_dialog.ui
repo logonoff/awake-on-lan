@@ -34,45 +34,51 @@
         </child>
 
         <property name="content">
-          <object class="GtkListBox" id="content">
-            <style>
-              <class name="boxed-list" />
-            </style>
-            <property name="selection-mode">none</property>
+          <object class="GtkBox" id="content_box">
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
             <property name="margin-top">24</property>
             <property name="margin-bottom">24</property>
             <property name="margin-start">24</property>
             <property name="margin-end">24</property>
 
             <child>
-              <object class="AdwEntryRow" id="name_entry">
-                <property name="title" translatable="yes">Name</property>
-                <signal name="changed" handler="validate_entry" swapped="no" />
-              </object>
-            </child>
+              <object class="GtkListBox" id="content">
+                <style>
+                  <class name="boxed-list" />
+                </style>
+                <property name="selection-mode">none</property>
 
-            <child>
-              <object class="AdwEntryRow" id="mac_entry">
-                <property name="title" translatable="yes">MAC Address</property>
-                <signal name="changed" handler="validate_entry" swapped="no" />
-              </object>
-            </child>
-
-            <child>
-              <object class="AdwSpinRow" id="port_entry">
-                <property name="title" translatable="yes">Port</property>
-                <property name="adjustment">
-                  <object class="GtkAdjustment">
-                    <property name="lower">1</property>
-                    <property name="upper">65535</property>
-                    <property name="value">9</property>
-                    <property name="step-increment">1</property>
+                <child>
+                  <object class="AdwEntryRow" id="name_entry">
+                    <property name="title" translatable="yes">Name</property>
+                    <signal name="changed" handler="validate_entry" swapped="no" />
                   </object>
-                </property>
+                </child>
+
+                <child>
+                  <object class="AdwEntryRow" id="mac_entry">
+                    <property name="title" translatable="yes">MAC Address</property>
+                    <signal name="changed" handler="validate_entry" swapped="no" />
+                  </object>
+                </child>
+
+                <child>
+                  <object class="AdwSpinRow" id="port_entry">
+                    <property name="title" translatable="yes">Port</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">1</property>
+                        <property name="upper">65535</property>
+                        <property name="value">9</property>
+                        <property name="step-increment">1</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
-
         </property>
       </object>
     </child>
