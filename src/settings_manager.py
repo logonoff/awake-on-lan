@@ -17,23 +17,26 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import os
 from .wol_client import WolClient
 
 class SettingsManager:
     """Settings and configuration manager for the application."""
     wol_clients: list[WolClient]
     settings_file: str
+    version: str
 
 
-    def __init__(self, base_path: str):
+    def __init__(self, base_path: str, version: str):
         self.wol_clients = []
         self.settings_file = f'{base_path}/co.logonoff.awakeonlan.settings.txt'
+        self.version = version
 
 
     def save_settings(self):
         """Save the settings to the settings file."""
         with open(self.settings_file, 'w', encoding='utf-8') as f:
+            f.write(f'# awake on lan version {self.version}\n')
+
             for client in self.wol_clients:
                 f.write(str(client) + '\n')
 

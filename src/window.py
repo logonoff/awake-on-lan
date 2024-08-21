@@ -42,7 +42,7 @@ class awakeonlanWindow(Adw.ApplicationWindow):
 
         XDG_CONFIG_HOME = os.getenv('XDG_CONFIG_HOME', os.path.expanduser('~/.config'))
 
-        self.wol_clients = SettingsManager(base_path=XDG_CONFIG_HOME)
+        self.wol_clients = SettingsManager(base_path=XDG_CONFIG_HOME, version=self.get_application().version)
         self.wol_clients.load_settings()
 
         self.remotes_list.get_style_context().add_class('boxed-list')
@@ -119,13 +119,29 @@ class awakeonlanWindow(Adw.ApplicationWindow):
 
     def spawn_edit_remote_dialog(self, wol_client, new_row):
         """Open the add dialog when the add button is clicked."""
-        def add_button_on_click(new_client):
+        def edit_button_on_click(new_client):
+            old_name = wol_client.name
+            old_mac = wol_client.get_mac_address()
+            old_port = wol_client.port
+
+            def revert():
+                new_client.name = old_name
+                new_client.mac_address = old_mac
+                new_client.port = old_port
+                new_row.set_title(old_name)
+                new_row.set_subtitle(old_mac)
+
             wol_client.name = new_client.name
             wol_client.mac_address = new_client.mac_address
             wol_client.port = new_client.port
             new_row.set_title(wol_client.name)
             new_row.set_subtitle(wol_client.get_mac_address())
-            self.toaster.add_toast(Adw.Toast.new('Remote edited'))
+
+            edited_toast = Adw.Toast.new(f'{wol_client.name} edited')
+            edited_toast.set_button_label('Undo')
+            edited_toast.connect('button-clicked', lambda _: revert())
+
+            self.toaster.add_toast(edited_toast)
 
         # delete button
         delete_button = Gtk.Button.new_from_icon_name('edit-delete-symbolic')
@@ -147,7 +163,7 @@ class awakeonlanWindow(Adw.ApplicationWindow):
         icon = Adw.StatusPage.new()
         icon.set_icon_name('computer')
 
-        dialog = AddDialogBox(add_function=add_button_on_click)
+        dialog = AddDialogBox(add_function=edit_button_on_click)
         dialog.cancel_button.connect('clicked', lambda _: delete_button_on_click())
         dialog.cancel_button.set_label('Delete')
         dialog.cancel_button.get_style_context().add_class('destructive-action')

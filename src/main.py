@@ -29,10 +29,12 @@ from .window import awakeonlanWindow
 
 class awakeonlanApplication(Adw.Application):
     """The main application singleton class."""
+    version: str
 
-    def __init__(self):
+    def __init__(self, version: str = '0.0.0'):
         super().__init__(application_id='co.logonoff.awakeonlan',
                          flags=Gio.ApplicationFlags.DEFAULT_FLAGS)
+        self.version = version
         self.create_action('quit', lambda *_: self.quit(), ['<primary>q', '<primary>w'])
         self.create_action('about', self.on_about_action)
         self.create_action('preferences', self.on_preferences_action)
@@ -50,7 +52,7 @@ class awakeonlanApplication(Adw.Application):
 
     def on_about_action(self, widget, _):
         """Callback for the app.about action."""
-        about = Adw.AboutWindow.new_from_appdata(f'{self.get_resource_base_path()}/metainfo', self.get_version())
+        about = Adw.AboutWindow.new_from_appdata(f'{self.get_resource_base_path()}/metainfo', self.version)
         about.set_transient_for(self.props.active_window)
         about.present()
 
@@ -76,5 +78,5 @@ class awakeonlanApplication(Adw.Application):
 
 def main(version):
     """The application's entry point."""
-    app = awakeonlanApplication()
+    app = awakeonlanApplication(version=version)
     return app.run(sys.argv)
