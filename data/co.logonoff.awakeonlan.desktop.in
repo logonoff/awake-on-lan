@@ -3,6 +3,6 @@ Name=Awake on LAN
 Exec=awakeonlan
 Icon=co.logonoff.awakeonlan
 Terminal=false
-Type=Network
+Type=Application
 Categories=RemoteAccess;
 StartupNotify=true

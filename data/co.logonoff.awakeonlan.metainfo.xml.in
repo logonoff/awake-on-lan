@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2024 logonoff -->
 <component type="desktop-application">
 	<id>co.logonoff.awakeonlan</id>
 
 	<name>Awake on LAN</name>
-	<summary>Wake up computers using Wake-on-LAN</summary>
+	<summary>Remotely wake up computers</summary>
 
 	<metadata_license>CC-BY-4.0</metadata_license>
 	<project_license>GPL-3.0-or-later</project_license>
 
 	<description>
-		<p>No description</p>
+		<p>
+			Awake on LAN is a simple application that allows you to wake up computers remotely using Wake-on-LAN packets. You can keep track of computers by adding, removing, and editing them with their MAC addresses, and you can start them remotely with the click of a button.
+		</p>
 	</description>
 
-	<developer>
-		<name>logonoff</name>
+	<developer id="co.logonoff">
+		<name translate="no">logonoff</name>
 	</developer>
 
 	<url type="homepage">https://github.com/logonoff/awakeonlan</url>
@@ -22,6 +25,8 @@
 
 	<launchable type="desktop-id">co.logonoff.awakeonlan.desktop</launchable>
 
+	<content_rating type="oars-1.1" />
+
 	<icon type="stock">co.logonoff.awakeonlan</icon>
 
 	<categories>
@@ -29,15 +34,42 @@
 		<category>RemoteAccess</category>
 	</categories>
 
+    <screenshots>
+		<screenshot type="default">
+			<image type="source" width="1662" height="1366">https://i.imgur.com/nTRC8JP.png</image>
+			<caption>The Awake on LAN main window.</caption>
+		</screenshot>
+
+		<screenshot>
+			<image type="source" width="1662" height="1366">https://i.imgur.com/6ldeVDA.png</image>
+			<caption>Awake on LAN showcasing the edit functionality.</caption>
+		</screenshot>
+
+		<screenshot>
+			<image type="source" width="1662" height="1366">https://i.imgur.com/lU7Jd9P.png</image>
+			<caption>The Awake on LAN main window after click "Start" on a remote computer.</caption>
+		</screenshot>
+
+		<screenshot>
+			<image type="source" width="1662" height="1366">https://i.imgur.com/pLzHxuO.png</image>
+			<caption>The Awake on LAN on the New Remote dialog.</caption>
+		</screenshot>
+	</screenshots>
+
 	<provides>
 		<binary>co.logonoff.awakeonlan</binary>
 	</provides>
 
 	<releases>
-		<release version="0.1.0" type="development">
+		<release version="0.1.0" date="2024-09-05">
 			<description>
-				<p>Initial release</p>
+				<p>Added the ability to add, remove, edit, and remotely start computers with Wake-on-LAN packets given a MAC address</p>
 			</description>
 		</release>
 	</releases>
+
+	<branding>
+		<color type="primary" scheme_preference="light">#ffaaaa</color>
+		<color type="primary" scheme_preference="dark">#2b0000</color>
+	</branding>
 </component>
