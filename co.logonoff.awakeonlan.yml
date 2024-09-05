@@ -26,4 +26,4 @@ modules:
   sources:
   - type: git
     url: https://github.com/logonoff/awake-on-lan.git
-    commit: 635ed94fd68f29376256508344b13f39de122a4e
+    branch: main

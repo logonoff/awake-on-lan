@@ -51,9 +51,9 @@ class awakeonlanWindow(Adw.ApplicationWindow):
             'add', lambda *_: self.spawn_add_remote_dialog(None), ['<primary>n']
         )
 
-        self.get_application().create_action(
-            'view-config', lambda *_: os.system(f'xdg-open {self.wol_clients.settings_file}'), ['<primary>m']
-        )
+        # self.get_application().create_action(
+            # 'view-config', lambda *_: os.system(f'xdg-open {self.wol_clients.settings_file}'), ['<primary>m']
+        # )
 
         for client in self.wol_clients.wol_clients:
             self._add_wol_client_to_list(client)
