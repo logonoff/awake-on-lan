@@ -19,9 +19,10 @@
 		<name translate="no">logonoff</name>
 	</developer>
 
-	<url type="homepage">https://github.com/logonoff/awakeonlan</url>
-
-	<url type="bugtracker">https://github.com/logonoff/awakeonlan/issues</url>
+	<url type="homepage">https://github.com/logonoff/awake-on-lan</url>
+	<url type="bugtracker">https://github.com/logonoff/awake-on-lan/issues</url>
+	<url type="vcs-browser">https://github.com/logonoff/awake-on-lan</url>
+ 	<url type="translate">https://github.com/logonoff/awake-on-lan/tree/main/po</url>
 
 	<launchable type="desktop-id">co.logonoff.awakeonlan.desktop</launchable>
 
