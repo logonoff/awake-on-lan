@@ -37,22 +37,22 @@
 
     <screenshots>
 		<screenshot type="default">
-			<image type="source" width="1662" height="1366">https://i.imgur.com/nTRC8JP.png</image>
+			<image type="source" width="1828" height="1426">https://i.imgur.com/hhkJnF4.png</image>
 			<caption>The Awake on LAN main window.</caption>
 		</screenshot>
 
 		<screenshot>
-			<image type="source" width="1662" height="1366">https://i.imgur.com/6ldeVDA.png</image>
+			<image type="source" width="1828" height="1426">https://i.imgur.com/g9YbnQL.png</image>
 			<caption>Awake on LAN showcasing the edit functionality.</caption>
 		</screenshot>
 
 		<screenshot>
-			<image type="source" width="1662" height="1366">https://i.imgur.com/lU7Jd9P.png</image>
+			<image type="source" width="1828" height="1426">https://i.imgur.com/RI0gmvu.png</image>
 			<caption>The Awake on LAN main window after clicking "Start" on a remote computer.</caption>
 		</screenshot>
 
 		<screenshot>
-			<image type="source" width="1662" height="1366">https://i.imgur.com/pLzHxuO.png</image>
+			<image type="source" width="1828" height="1426">https://i.imgur.com/28PhtB3.png</image>
 			<caption>The Awake on LAN on the New Remote dialog.</caption>
 		</screenshot>
 	</screenshots>
@@ -71,6 +71,6 @@
 
 	<branding>
 		<color type="primary" scheme_preference="light">#ffaaaa</color>
-		<color type="primary" scheme_preference="dark">#2b0000</color>
+		<color type="primary" scheme_preference="dark">#5a3232</color>
 	</branding>
 </component>
