@@ -20,8 +20,8 @@
                 <!-- button to open form -->
                 <child type="start">
                   <object class="GtkButton" id="add_button">
-                    <property name="icon-name">list-add-symbolic</property>
                     <property name="label" translatable="yes">Add</property>
+                    <property name="icon-name">list-add-symbolic</property>
                     <signal name="clicked" handler="spawn_add_remote_dialog" swapped="no" />
                   </object>
                 </child>
@@ -29,8 +29,8 @@
                 <child type="end">
                   <object class="GtkMenuButton">
                     <property name="primary">True</property>
-                    <property name="icon-name">open-menu-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Menu</property>
+                    <property name="icon-name">open-menu-symbolic</property>
                     <property name="menu-model">primary_menu</property>
                   </object>
                 </child>
@@ -96,7 +96,7 @@
     <section>
       <!--
       <item>
-        <attribute name="label" translatable="yes">_Preferences</attribute>
+        <attribute name="label" translatable="yes">Preferences</attribute>
         <attribute name="action">app.preferences</attribute>
         </item>
       <item>

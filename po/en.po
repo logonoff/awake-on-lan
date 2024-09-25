@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: co.logonoff.awakeonlan\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-25 14:19-0400\n"
-"PO-Revision-Date: 2024-09-25 14:19-0400\n"
+"POT-Creation-Date: 2024-09-25 14:33-0400\n"
+"PO-Revision-Date: 2024-09-25 14:33-0400\n"
 "Last-Translator: Jackson Lee <i18n@logonoff.co>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -57,8 +57,9 @@ msgid "The Awake on LAN on the New Remote dialog."
 msgstr "The Awake on LAN on the New Remote dialog."
 
 #: data/co.logonoff.awakeonlan.metainfo.xml.in:67
-msgid "Fixed application metadata and addded translation."
-msgstr "Fixed application metadata and addded translation."
+msgid "Fixed application metadata and addded support for internationalization."
+msgstr ""
+"Fixed application metadata and addded support for internationalization."
 
 #: data/co.logonoff.awakeonlan.metainfo.xml.in:72
 msgid ""
@@ -94,7 +95,7 @@ msgstr "{name} edited"
 msgid "Undo"
 msgstr "Undo"
 
-#: src/window.py:144 src/window.py:167
+#: src/window.py:144 src/window.py:169
 msgid "Delete"
 msgstr "Delete"
 
@@ -103,15 +104,15 @@ msgstr "Delete"
 msgid "{name} removed"
 msgstr "{name} removed"
 
-#: src/window.py:172
+#: src/window.py:174
 msgid "Edit Remote"
 msgstr "Edit Remote"
 
-#: src/window.ui:24
+#: src/window.ui:23
 msgid "Add"
 msgstr "Add"
 
-#: src/window.ui:33
+#: src/window.ui:32
 msgid "Menu"
 msgstr "Menu"
 
