@@ -20,8 +20,8 @@
                 <!-- button to open form -->
                 <child type="start">
                   <object class="GtkButton" id="add_button">
-                    <property name="label" translatable="yes">Add</property>
                     <property name="icon-name">list-add-symbolic</property>
+                    <property name="label" translatable="yes">Add</property>
                     <signal name="clicked" handler="spawn_add_remote_dialog" swapped="no" />
                   </object>
                 </child>

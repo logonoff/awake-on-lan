@@ -1,0 +1,156 @@
+# English translations for co.logonoff.awakeonlan package.
+# Copyright (C) 2024 logonoff
+# This file is distributed under the same license as the co.logonoff.awakeonlan package.
+# logonoff <i18n@logonoff.co>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: co.logonoff.awakeonlan\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-09-25 14:19-0400\n"
+"PO-Revision-Date: 2024-09-25 14:19-0400\n"
+"Last-Translator: Jackson Lee <i18n@logonoff.co>\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: data/co.logonoff.awakeonlan.desktop.in:3
+#: data/co.logonoff.awakeonlan.metainfo.xml.in:6 src/window.py:41
+msgid "Awake on LAN"
+msgstr "Awake on LAN"
+
+#: data/co.logonoff.awakeonlan.metainfo.xml.in:7
+msgid "Remotely wake up computers"
+msgstr "Remotely wake up computers"
+
+#: data/co.logonoff.awakeonlan.metainfo.xml.in:13
+msgid ""
+"Awake on LAN is a simple application that allows you to wake up computers "
+"remotely using Wake-on-LAN packets. You can keep track of computers by "
+"adding, removing, and editing them with their MAC addresses, and you can "
+"start them remotely with the click of a button."
+msgstr ""
+"Awake on LAN is a simple application that allows you to wake up computers "
+"remotely using Wake-on-LAN packets. You can keep track of computers by "
+"adding, removing, and editing them with their MAC addresses, and you can "
+"start them remotely with the click of a button."
+
+#: data/co.logonoff.awakeonlan.metainfo.xml.in:41
+msgid "The Awake on LAN main window."
+msgstr "The Awake on LAN main window."
+
+#: data/co.logonoff.awakeonlan.metainfo.xml.in:46
+msgid "Awake on LAN showcasing the edit functionality."
+msgstr "Awake on LAN showcasing the edit functionality."
+
+#: data/co.logonoff.awakeonlan.metainfo.xml.in:51
+msgid ""
+"The Awake on LAN main window after clicking \"Start\" on a remote computer."
+msgstr ""
+"The Awake on LAN main window after clicking \"Start\" on a remote computer."
+
+#: data/co.logonoff.awakeonlan.metainfo.xml.in:56
+msgid "The Awake on LAN on the New Remote dialog."
+msgstr "The Awake on LAN on the New Remote dialog."
+
+#: data/co.logonoff.awakeonlan.metainfo.xml.in:67
+msgid "Fixed application metadata and addded translation."
+msgstr "Fixed application metadata and addded translation."
+
+#: data/co.logonoff.awakeonlan.metainfo.xml.in:72
+msgid ""
+"Added the ability to add, remove, edit, and remotely start computers with "
+"Wake-on-LAN packets given a MAC address"
+msgstr ""
+"Added the ability to add, remove, edit, and remotely start computers with "
+"Wake-on-LAN packets given a MAC address"
+
+#: src/window.py:84
+msgid "Edit"
+msgstr "Edit"
+
+#: src/window.py:94
+msgid "Start"
+msgstr "Start"
+
+#: src/window.py:99
+#, python-brace-format
+msgid "Sent magic packet to {name}"
+msgstr "Sent magic packet to {name}"
+
+#: src/window.py:113
+msgid "Remote added"
+msgstr "Remote added"
+
+#: src/window.py:136
+#, python-brace-format
+msgid "{name} edited"
+msgstr "{name} edited"
+
+#: src/window.py:137 src/window.py:150
+msgid "Undo"
+msgstr "Undo"
+
+#: src/window.py:144 src/window.py:167
+msgid "Delete"
+msgstr "Delete"
+
+#: src/window.py:149
+#, python-brace-format
+msgid "{name} removed"
+msgstr "{name} removed"
+
+#: src/window.py:172
+msgid "Edit Remote"
+msgstr "Edit Remote"
+
+#: src/window.ui:24
+msgid "Add"
+msgstr "Add"
+
+#: src/window.ui:33
+msgid "Menu"
+msgstr "Menu"
+
+#: src/window.ui:80
+msgid "No remotes yet"
+msgstr "No remotes yet"
+
+#: src/window.ui:81
+msgid "Click \"Add\" to get started!"
+msgstr "Click \"Add\" to get started!"
+
+#: src/window.ui:108
+msgid "Keyboard Shortcuts"
+msgstr "Keyboard Shortcuts"
+
+#: src/window.ui:112
+msgid "About Awake on LAN"
+msgstr "About Awake on LAN"
+
+#: src/add_dialog.ui:6
+msgid "New Remote"
+msgstr "New Remote"
+
+#: src/add_dialog.ui:14
+msgid "Cancel"
+msgstr "Cancel"
+
+#: src/add_dialog.ui:20
+msgid "Save"
+msgstr "Save"
+
+#: src/add_dialog.ui:54
+msgid "Name"
+msgstr "Name"
+
+#: src/add_dialog.ui:61
+msgid "MAC Address"
+msgstr "MAC Address"
+
+#: src/add_dialog.ui:68
+msgid "Port"
+msgstr "Port"

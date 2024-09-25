@@ -32,3 +32,7 @@ reset: clean
 
 run:
 	flatpak run $(APP_ID)
+
+i18n:
+	xgettext --files-from=po/POTFILES --from-code=UTF-8 --output po/awakeonlan.pot --copyright-holder="logonoff" --package-name="$(APP_ID)"
+	# pushd po && msginit --locale=en --input=awakeonlan.pot && popd

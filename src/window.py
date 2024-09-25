@@ -38,7 +38,7 @@ class awakeonlanWindow(Adw.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.set_title('Awake on LAN')
+        self.set_title(_('Awake on LAN'))
 
         XDG_CONFIG_HOME = os.getenv('XDG_CONFIG_HOME', os.path.expanduser('~/.config'))
 
@@ -81,7 +81,7 @@ class awakeonlanWindow(Adw.ApplicationWindow):
 
         # kebab button (edit)
         kebab_button = Gtk.Button.new_from_icon_name('view-more')
-        kebab_button.set_tooltip_text('Edit')
+        kebab_button.set_tooltip_text(_('Edit'))
         kebab_button.get_style_context().add_class('flat')
 
         kebab_button.connect('clicked', lambda _: self.spawn_edit_remote_dialog(wol_client, new_row))
@@ -91,12 +91,12 @@ class awakeonlanWindow(Adw.ApplicationWindow):
 
         # create start button
         start_button = Gtk.Button.new_from_icon_name('media-playback-start-symbolic')
-        start_button.set_tooltip_text('Start')
+        start_button.set_tooltip_text(_('Start'))
         start_button.get_style_context().add_class('flat')
 
         start_button.connect('clicked', lambda _: (
             wol_client.send_magic_packet(),
-            self.toaster.add_toast(Adw.Toast.new(f'Sent magic packet to {wol_client.name}'))
+            self.toaster.add_toast(Adw.Toast.new(_('Sent magic packet to {name}').format(name = wol_client.name)))
         ))
 
         new_row.add_suffix(start_button)
@@ -110,7 +110,7 @@ class awakeonlanWindow(Adw.ApplicationWindow):
         def add_button_on_click(new_client):
             self.wol_clients.add_wol_client(new_client)
             self._add_wol_client_to_list(new_client)
-            self.toaster.add_toast(Adw.Toast.new('Remote added'))
+            self.toaster.add_toast(Adw.Toast.new(_('Remote added')))
 
         dialog = AddDialogBox(add_function=add_button_on_click)
 
@@ -133,21 +133,21 @@ class awakeonlanWindow(Adw.ApplicationWindow):
             new_row.set_subtitle(client.get_mac_address())
             self.wol_clients.save_settings()
 
-            edited_toast = Adw.Toast.new(f'{client.name} edited')
-            edited_toast.set_button_label('Undo')
+            edited_toast = Adw.Toast.new(_('{name} edited').format(name=client.name))
+            edited_toast.set_button_label(_('Undo'))
             edited_toast.connect('button-clicked', lambda _: revert())
 
             self.toaster.add_toast(edited_toast)
 
         # delete button
         delete_button = Gtk.Button.new_from_icon_name('edit-delete-symbolic')
-        delete_button.set_tooltip_text('Delete')
+        delete_button.set_tooltip_text(_('Delete'))
         delete_button.get_style_context().add_class('flat')
 
         def delete_button_on_click():
             position = self.wol_clients.remove_wol_client(client)
-            deleted_toast = Adw.Toast.new(f'{client.name} removed')
-            deleted_toast.set_button_label('Undo')
+            deleted_toast = Adw.Toast.new(_('{name} removed').format(name=client.name))
+            deleted_toast.set_button_label(_('Undo'))
             deleted_toast.connect('button-clicked', lambda _: (
                 self.wol_clients.add_wol_client_at_position(client, position),
                 self.remotes_list.insert(new_row, position),
@@ -159,17 +159,19 @@ class awakeonlanWindow(Adw.ApplicationWindow):
                 self._show_no_items(True)
 
         # adw computer icon
-        icon = Adw.StatusPage.new()
-        icon.set_icon_name('computer')
+        icon = Gtk.Image.new_from_icon_name('computer')
+        icon.get_style_context().add_class('icon-dropshadow')
+        icon.set_pixel_size(128)
+        icon.set_margin_bottom(12)
 
         dialog = AddDialogBox(add_function=edit_button_on_click)
         dialog.cancel_button.connect('clicked', lambda _: delete_button_on_click())
-        dialog.cancel_button.set_label('Delete')
+        dialog.cancel_button.set_label(_('Delete'))
         dialog.cancel_button.get_style_context().add_class('destructive-action')
 
         dialog.content_box.prepend(icon)
 
-        dialog.set_title('Edit Remote')
+        dialog.set_title(_('Edit Remote'))
 
         dialog.name_entry.set_text(client.name)
         dialog.mac_entry.set_text(client.get_mac_address())

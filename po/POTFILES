@@ -4,3 +4,4 @@ data/co.logonoff.awakeonlan.gschema.xml
 src/main.py
 src/window.py
 src/window.ui
+src/add_dialog.ui
