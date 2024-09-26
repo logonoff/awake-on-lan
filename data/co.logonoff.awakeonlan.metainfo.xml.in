@@ -63,17 +63,17 @@
 
 	<releases>
 		<release version="0.3.0">
-			<description>
-				<p></p>
+			<description translate="no">
+				<p>Added Italian translation</p>
 			</description>
 		</release>
 		<release version="0.2.0" date="2024-09-25">
-			<description>
-				<p>Fixed application metadata and addded support for internationalization.</p>
+			<description translate="no">
+				<p>Fixed application metadata and added support for internationalization.</p>
 			</description>
 		</release>
 		<release version="0.1.0" date="2024-09-05">
-			<description>
+			<description translate="no">
 				<p>Added the ability to add, remove, edit, and remotely start computers with Wake-on-LAN packets given a MAC address</p>
 			</description>
 		</release>

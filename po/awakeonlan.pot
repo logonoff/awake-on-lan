@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: co.logonoff.awakeonlan\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-25 14:33-0400\n"
+"POT-Creation-Date: 2024-09-26 10:28-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,16 +49,6 @@ msgstr ""
 
 #: data/co.logonoff.awakeonlan.metainfo.xml.in:56
 msgid "The Awake on LAN on the New Remote dialog."
-msgstr ""
-
-#: data/co.logonoff.awakeonlan.metainfo.xml.in:67
-msgid "Fixed application metadata and addded support for internationalization."
-msgstr ""
-
-#: data/co.logonoff.awakeonlan.metainfo.xml.in:72
-msgid ""
-"Added the ability to add, remove, edit, and remotely start computers with "
-"Wake-on-LAN packets given a MAC address"
 msgstr ""
 
 #: src/window.py:84

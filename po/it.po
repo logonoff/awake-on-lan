@@ -55,18 +55,6 @@ msgstr ""
 msgid "The Awake on LAN on the New Remote dialog."
 msgstr "Finestra di dialogo Wake on LAN sul nuovo pc remoto."
 
-#: data/co.logonoff.awakeonlan.metainfo.xml.in:67
-msgid "Fixed application metadata and addded support for internationalization."
-msgstr "Corretti i metadati dell'applicazione e aggiunto il supporto per l'internazionalizzazione."
-
-#: data/co.logonoff.awakeonlan.metainfo.xml.in:72
-msgid ""
-"Added the ability to add, remove, edit, and remotely start computers with "
-"Wake-on-LAN packets given a MAC address"
-msgstr ""
-"Aggiunta la possibilità di aggiungere, rimuovere, modificare e avviare da remoto i computer con "
-"pacchetti Wake-on-LAN a cui è stato assegnato un indirizzo MAC"
-
 #: src/window.py:84
 msgid "Edit"
 msgstr "Modifica"
