@@ -64,7 +64,7 @@
 	<releases>
 		<release version="0.3.0">
 			<description translate="no">
-				<p>Added Italian translation</p>
+				<p>Added Italian translation and update the icon.</p>
 			</description>
 		</release>
 		<release version="0.2.0" date="2024-09-25">
