@@ -120,7 +120,7 @@ msgstr "Informazioni su Awake on LAN"
 
 #: src/add_dialog.ui:6
 msgid "New Remote"
-msgstr "NUovo pc remoto"
+msgstr "Nuovo pc remoto"
 
 #: src/add_dialog.ui:14
 msgid "Cancel"
