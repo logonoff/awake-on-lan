@@ -54,10 +54,16 @@ class WolClient:
         return len(cleaned) == 12 and all(char in '0123456789abcdefABCDEF' for char in cleaned)
 
 
+    @staticmethod
+    def format_mac(mac_address: bytes) -> str:
+        """Get a friendly string representation of the MAC address."""
+        mac = mac_address.hex()
+        return ':'.join(mac[i:i+2] for i in range(0, len(mac), 2))
+
+
     def get_mac_address(self) -> str:
         """Get a friendly string representation of the MAC address."""
-        mac = self.mac_address.hex()
-        return ':'.join(mac[i:i+2] for i in range(0, len(mac), 2))
+        return WolClient.format_mac(self.mac_address)
 
 
     def send_magic_packet(self):

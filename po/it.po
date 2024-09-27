@@ -49,7 +49,7 @@ msgstr "Awake on LAN mostra la funzionalità di modifica."
 msgid ""
 "The Awake on LAN main window after clicking \"Start\" on a remote computer."
 msgstr ""
-"La finestra principale di Wake on LAN dopo aver cliccato su \"Avvia\" su un computer remoto.
+"La finestra principale di Wake on LAN dopo aver cliccato su \"Avvia\" su un computer remoto."
 
 #: data/co.logonoff.awakeonlan.metainfo.xml.in:56
 msgid "The Awake on LAN on the New Remote dialog."
@@ -66,7 +66,7 @@ msgstr "Avvia"
 #: src/window.py:99
 #, python-brace-format
 msgid "Sent magic packet to {name}"
-msgstr "Inviato pacchetto magico a {nome}"
+msgstr "Inviato pacchetto magico a {name}"
 
 #: src/window.py:113
 msgid "Remote added"
@@ -88,7 +88,7 @@ msgstr "Elimina"
 #: src/window.py:149
 #, python-brace-format
 msgid "{name} removed"
-msgstr "{nome} rimosso"
+msgstr "{name} rimosso"
 
 #: src/window.py:174
 msgid "Edit Remote"

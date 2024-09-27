@@ -22,6 +22,7 @@ from gi.repository import Adw
 from gi.repository import Gtk
 from .add_dialog import AddDialogBox
 from .settings_manager import SettingsManager
+from .wol_client import WolClient
 
 @Gtk.Template(resource_path='/co/logonoff/awakeonlan/window.ui')
 class awakeonlanWindow(Adw.ApplicationWindow):
@@ -94,9 +95,11 @@ class awakeonlanWindow(Adw.ApplicationWindow):
         start_button.set_tooltip_text(_('Start'))
         start_button.get_style_context().add_class('flat')
 
+        magic_packet_sent_text = _('Sent magic packet to {name}').format(name=wol_client.name)
+
         start_button.connect('clicked', lambda _: (
             wol_client.send_magic_packet(),
-            self.toaster.add_toast(Adw.Toast.new(_('Sent magic packet to {name}').format(name = wol_client.name)))
+            self.toaster.add_toast(Adw.Toast.new(magic_packet_sent_text))
         ))
 
         new_row.add_suffix(start_button)
@@ -125,7 +128,7 @@ class awakeonlanWindow(Adw.ApplicationWindow):
             def revert():
                 client.name, client.mac_address, client.port = old_name, old_mac, old_port
                 new_row.set_title(old_name)
-                new_row.set_subtitle(old_mac)
+                new_row.set_subtitle(WolClient.format_mac(old_mac))
                 self.wol_clients.save_settings()
 
             client.name, client.mac_address, client.port = edited_client.name, edited_client.mac_address, edited_client.port

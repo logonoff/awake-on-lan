@@ -62,7 +62,7 @@
 	</provides>
 
 	<releases>
-		<release version="0.3.0">
+		<release version="0.3.0" date="2024-09-26">
 			<description translate="no">
 				<p>Added Italian translation and update the icon.</p>
 			</description>
