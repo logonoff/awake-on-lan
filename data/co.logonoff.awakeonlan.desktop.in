@@ -1,8 +1,9 @@
 [Desktop Entry]
 Name=Awake on LAN
+Comment=Remotely wake up computers
 Exec=awakeonlan
 Icon=co.logonoff.awakeonlan
 Terminal=false
 Type=Application
-Categories=RemoteAccess;
+Categories=RemoteAccess;Utility;
 StartupNotify=true

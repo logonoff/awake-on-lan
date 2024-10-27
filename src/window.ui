@@ -90,6 +90,8 @@
                         <property name="child">
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
+                            <property name="margin-top">6</property>
+                            <property name="margin-bottom">12</property>
                             <child>
                               <object class="GtkListBox" id="remotes_list">
                                 <property name="selection-mode">none</property>

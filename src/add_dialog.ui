@@ -17,7 +17,7 @@
 
             <child type="end">
               <object class="GtkButton" id="add_button">
-                <property name="label" translatable="yes">Save</property>
+                <property name="label" translatable="yes">Add</property>
 
                 <style>
                   <class name="suggested-action" />
