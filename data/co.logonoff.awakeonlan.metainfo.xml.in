@@ -62,7 +62,7 @@
 	</provides>
 
 	<releases>
-		<release version="0.4.0">
+		<release version="0.4.0" date="2024-10-27">
 			<description translate="no">
 				<p>Updated Italian translation, added "Add remote" button to empty page, and fixed visual defects with the empty page.</p>
 			</description>
