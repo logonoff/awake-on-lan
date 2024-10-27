@@ -49,62 +49,61 @@
             </child> -->
 
             <property name="content">
-              <object class="GtkScrolledWindow">
-                <property name="hscrollbar-policy">never</property>
-                <property name="min-content-height">420</property>
+              <object class="GtkBox">
+                <property name="halign">fill</property>
+                <property name="hexpand">True</property>
+                <property name="homogeneous">True</property>
+                <property name="margin-end">12</property>
+                <property name="margin-start">12</property>
+                <property name="orientation">vertical</property>
+                <property name="valign">fill</property>
                 <property name="vexpand">True</property>
-                <property name="child">
-                  <object class="AdwClamp">
+                <child>
+                  <object class="AdwStatusPage" id="no_items">
+                    <property name="icon-name">network-workgroup</property>
+                    <property name="title" translatable="yes">No remotes yet</property>
+                    <property name="description" translatable="yes">Add a remote to get started!</property>
                     <property name="child">
-                      <object class="GtkBox" id="content_box">
-                        <property name="margin-top">12</property>
-                        <property name="margin-bottom">12</property>
-                        <property name="margin-start">12</property>
-                        <property name="margin-end">12</property>
-                        <property name="orientation">vertical</property>
-                        <property name="valign">center</property>
+                        <object class="GtkBox">
+                          <property name="halign">center</property>
+                          <child>
+                            <object class="GtkButton" id="add_button_cta">
+                              <property name="label" translatable="yes">Add Remote...</property>
+                              <signal name="clicked" handler="spawn_add_remote_dialog" swapped="no" />
+                              <style>
+                                <class name="suggested-action" />
+                                <class name="pill" />
+                              </style>
+                            </object>
+                          </child>
+                        </object>
+                    </property>
+                  </object>
+                </child>
 
-                        <child>
-                          <object class="GtkListBox" id="remotes_list">
-                            <property name="selection-mode">none</property>
-                            <style>
-                              <class name="boxed-list" />
-                            </style>
-                          </object>
-                        </child>
-
-                        <child>
-                          <object class="GtkBox" id="no_items">
+                <child>
+                  <object class="GtkScrolledWindow" id="content_box">
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="vexpand">True</property>
+                    <property name="child">
+                      <object class="AdwClamp">
+                        <property name="child">
+                          <object class="GtkBox">
                             <property name="orientation">vertical</property>
-                            <property name="valign">center</property>
                             <child>
-                              <object class="AdwStatusPage">
-                                <property name="icon-name">network-workgroup</property>
-                                <property name="title" translatable="yes">No remotes yet</property>
-                                <property name="description" translatable="yes">Add a remote to get started!</property>
-                                <property name="child">
-                                    <object class="GtkBox">
-                                      <property name="halign">center</property>
-                                      <child>
-                                        <object class="GtkButton" id="add_button_cta">
-                                          <property name="label" translatable="yes">Add Remote...</property>
-                                          <signal name="clicked" handler="spawn_add_remote_dialog" swapped="no" />
-                                          <style>
-                                            <class name="suggested-action" />
-                                            <class name="pill" />
-                                          </style>
-                                        </object>
-                                      </child>
-                                    </object>
-                                </property>
+                              <object class="GtkListBox" id="remotes_list">
+                                <property name="selection-mode">none</property>
+                                <style>
+                                  <class name="boxed-list" />
+                                </style>
                               </object>
                             </child>
                           </object>
-                        </child>
+                        </property>
                       </object>
                     </property>
                   </object>
-                </property>
+                </child>
               </object>
             </property>
           </object>

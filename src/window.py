@@ -46,8 +46,6 @@ class awakeonlanWindow(Adw.ApplicationWindow):
         self.wol_clients = SettingsManager(base_path=XDG_CONFIG_HOME, version=self.get_application().version)
         self.wol_clients.load_settings()
 
-        self.remotes_list.get_style_context().add_class('boxed-list')
-
         self.get_application().create_action(
             'add', lambda *_: self.spawn_add_remote_dialog(None), ['<primary>n']
         )
@@ -59,15 +57,17 @@ class awakeonlanWindow(Adw.ApplicationWindow):
         for client in self.wol_clients.wol_clients:
             self._add_wol_client_to_list(client)
 
+        self._show_no_items(not self.wol_clients.wol_clients)
+
 
     def _show_no_items(self, show: bool):
         """Show or hide the no items page."""
         if show:
             self.no_items.show()
-            self.content_box.set_valign(Gtk.Align.CENTER)
+            self.content_box.hide()
         else:
             self.no_items.hide()
-            self.content_box.set_valign(Gtk.Align.FILL)
+            self.content_box.show()
 
 
     def _add_wol_client_to_list(self, wol_client):
