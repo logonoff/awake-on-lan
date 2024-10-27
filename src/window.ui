@@ -3,8 +3,8 @@
   <requires lib="gtk" version="4.0" />
   <requires lib="Adw" version="1.5" />
   <template class="awakeonlanWindow" parent="AdwApplicationWindow">
-    <property name="default-width">960</property>
-    <property name="default-height">720</property>
+    <property name="default-width">500</property>
+    <property name="default-height">600</property>
     <property name="content">
       <object class="GtkOverlay" id="overlay">
         <child type="overlay">
@@ -61,7 +61,6 @@
                         <property name="margin-bottom">12</property>
                         <property name="margin-start">12</property>
                         <property name="margin-end">12</property>
-                        <property name="spacing">12</property>
                         <property name="orientation">vertical</property>
                         <property name="valign">center</property>
 
@@ -75,10 +74,31 @@
                         </child>
 
                         <child>
-                          <object class="AdwStatusPage" id="no_items">
-                            <property name="icon-name">network-workgroup</property>
-                            <property name="title" translatable="yes">No remotes yet</property>
-                            <property name="description" translatable="yes">Click "Add" to get started!</property>
+                          <object class="GtkBox" id="no_items">
+                            <property name="orientation">vertical</property>
+                            <property name="valign">center</property>
+                            <child>
+                              <object class="AdwStatusPage">
+                                <property name="icon-name">network-workgroup</property>
+                                <property name="title" translatable="yes">No remotes yet</property>
+                                <property name="description" translatable="yes">Add a remote to get started!</property>
+                                <property name="child">
+                                    <object class="GtkBox">
+                                      <property name="halign">center</property>
+                                      <child>
+                                        <object class="GtkButton" id="add_button_cta">
+                                          <property name="label" translatable="yes">Add Remote...</property>
+                                          <signal name="clicked" handler="spawn_add_remote_dialog" swapped="no" />
+                                          <style>
+                                            <class name="suggested-action" />
+                                            <class name="pill" />
+                                          </style>
+                                        </object>
+                                      </child>
+                                    </object>
+                                </property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
