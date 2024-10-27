@@ -64,7 +64,7 @@
 	<releases>
 		<release version="0.4.0">
 			<description translate="no">
-				<p></p>
+				<p>Updated Italian translation, added "Add remote" button to empty page, and fixed visual defects with the empty page.</p>
 			</description>
 		</release>
 		<release version="0.3.0" date="2024-09-26">

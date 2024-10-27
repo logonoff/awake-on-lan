@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: co.logonoff.awakeonlan\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-26 10:28-0400\n"
+"POT-Creation-Date: 2024-10-27 16:45-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,10 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: data/co.logonoff.awakeonlan.desktop.in:3
-#: data/co.logonoff.awakeonlan.metainfo.xml.in:6 src/window.py:41
+#: data/co.logonoff.awakeonlan.metainfo.xml.in:6 src/window.py:42
 msgid "Awake on LAN"
 msgstr ""
 
+#: data/co.logonoff.awakeonlan.desktop.in:4
 #: data/co.logonoff.awakeonlan.metainfo.xml.in:7
 msgid "Remotely wake up computers"
 msgstr ""
@@ -51,46 +52,46 @@ msgstr ""
 msgid "The Awake on LAN on the New Remote dialog."
 msgstr ""
 
-#: src/window.py:84
+#: src/window.py:85
 msgid "Edit"
 msgstr ""
 
-#: src/window.py:94
+#: src/window.py:95
 msgid "Start"
 msgstr ""
 
-#: src/window.py:99
+#: src/window.py:98
 #, python-brace-format
 msgid "Sent magic packet to {name}"
 msgstr ""
 
-#: src/window.py:113
+#: src/window.py:116
 msgid "Remote added"
 msgstr ""
 
-#: src/window.py:136
+#: src/window.py:139
 #, python-brace-format
 msgid "{name} edited"
 msgstr ""
 
-#: src/window.py:137 src/window.py:150
+#: src/window.py:140 src/window.py:153
 msgid "Undo"
 msgstr ""
 
-#: src/window.py:144 src/window.py:169
+#: src/window.py:147 src/window.py:172
 msgid "Delete"
 msgstr ""
 
-#: src/window.py:149
+#: src/window.py:152
 #, python-brace-format
 msgid "{name} removed"
 msgstr ""
 
-#: src/window.py:174
+#: src/window.py:177
 msgid "Edit Remote"
 msgstr ""
 
-#: src/window.ui:23
+#: src/window.ui:23 src/add_dialog.ui:20
 msgid "Add"
 msgstr ""
 
@@ -98,19 +99,23 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: src/window.ui:80
+#: src/window.ui:64
 msgid "No remotes yet"
 msgstr ""
 
-#: src/window.ui:81
-msgid "Click \"Add\" to get started!"
+#: src/window.ui:65
+msgid "Add a remote to get started!"
 msgstr ""
 
-#: src/window.ui:108
+#: src/window.ui:71
+msgid "Add Remote..."
+msgstr ""
+
+#: src/window.ui:129
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: src/window.ui:112
+#: src/window.ui:133
 msgid "About Awake on LAN"
 msgstr ""
 
@@ -120,10 +125,6 @@ msgstr ""
 
 #: src/add_dialog.ui:14
 msgid "Cancel"
-msgstr ""
-
-#: src/add_dialog.ui:20
-msgid "Save"
 msgstr ""
 
 #: src/add_dialog.ui:54
