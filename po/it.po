@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: co.logonoff.awakeonlan\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-25 14:33-0400\n"
-"PO-Revision-Date: 2024-09-26 11:45+0100\n"
+"PO-Revision-Date: 2024-10-28 13:45+0100\n"
 "Last-Translator: Albano Battistella <albanobattistella@gmail.com>\n"
 "Language-Team: Italian <LL@li.org>\n"
 "Language: it\n"
@@ -114,7 +114,7 @@ msgstr "Aggiungi un remoto per iniziare!"
 
 #: src/window.ui:71
 msgid "Add Remote..."
-msgstr "Aggiungi un remoto PC...."
+msgstr "Aggiungi un PC remoto..."
 
 #: src/window.ui:129
 msgid "Keyboard Shortcuts"
