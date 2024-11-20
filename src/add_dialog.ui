@@ -64,6 +64,13 @@
                 </child>
 
                 <child>
+                  <object class="AdwEntryRow" id="ip_entry">
+                    <property name="title" translatable="yes">IP Address (optional)</property>
+                    <signal name="changed" handler="validate_entry" swapped="no" />
+                  </object>
+                </child>
+
+                <child>
                   <object class="AdwSpinRow" id="port_entry">
                     <property name="title" translatable="yes">Port</property>
                     <property name="adjustment">
