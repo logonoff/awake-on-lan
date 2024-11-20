@@ -80,7 +80,7 @@ class awakeonlanWindow(Adw.ApplicationWindow):
 
         new_row = Adw.ActionRow.new()
         new_row.set_title(wol_client.name)
-        new_row.set_subtitle(wol_client.get_mac_address())
+        new_row.set_subtitle(wol_client.get_subtitle())
         new_row.get_style_context().add_class('AdwActionRow')
         new_row.set_activatable(True)
 
@@ -127,17 +127,17 @@ class awakeonlanWindow(Adw.ApplicationWindow):
     def spawn_edit_remote_dialog(self, client, new_row):
         """Open the add dialog when the add button is clicked."""
         def edit_button_on_click(edited_client):
-            old_name, old_mac, old_port = client.name, client.mac_address, client.port
+            old_name, old_mac, old_port, old_hostname = client.name, client.mac_address, client.port, client.hostname
 
             def revert():
-                client.name, client.mac_address, client.port = old_name, old_mac, old_port
+                client.name, client.mac_address, client.port, client.hostname = old_name, old_mac, old_port, old_hostname
                 new_row.set_title(old_name)
-                new_row.set_subtitle(WolClient.format_mac(old_mac))
+                new_row.set_subtitle(client.get_subtitle())
                 self.wol_clients.save_settings()
 
-            client.name, client.mac_address, client.port = edited_client.name, edited_client.mac_address, edited_client.port
+            client.name, client.mac_address, client.port, client.hostname = edited_client.name, edited_client.mac_address, edited_client.port, edited_client.hostname
             new_row.set_title(client.name)
-            new_row.set_subtitle(client.get_mac_address())
+            new_row.set_subtitle(client.get_subtitle())
             self.wol_clients.save_settings()
 
             edited_toast = Adw.Toast.new(_('{name} edited').format(name=client.name))
@@ -182,7 +182,8 @@ class awakeonlanWindow(Adw.ApplicationWindow):
 
         dialog.name_entry.set_text(client.name)
         dialog.mac_entry.set_text(client.get_mac_address())
-        dialog.port_entry.set_text(str(client.port))
+        dialog.port_entry.set_value(client.port)
+        dialog.hostname_entry.set_text(client.hostname)
 
         dialog.present(self)
         dialog.name_entry.grab_focus()

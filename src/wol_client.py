@@ -17,8 +17,10 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import re
 import socket
 import json
+import ipaddress
 from typing import Union
 
 class WolClient:
@@ -28,8 +30,9 @@ class WolClient:
     mac_address: bytes
     name: str
     port: int
+    hostname: str
 
-    def __init__(self, mac_address: Union[bytes, str], name: str, port: int = 7):
+    def __init__(self, mac_address: Union[bytes, str], name: str, hostname: str = "", port: int = 7):
         if isinstance(mac_address, str):
             self.mac_address = bytes.fromhex(
                 ''.join(char for char in mac_address if char.isalnum())
@@ -39,6 +42,7 @@ class WolClient:
 
         self.name = name
         self.port = int(port)
+        self.hostname = hostname
 
 
     @staticmethod
@@ -53,6 +57,25 @@ class WolClient:
         cleaned = ''.join(char for char in mac_address if char.isalnum())
         return len(cleaned) == 12 and all(char in '0123456789abcdefABCDEF' for char in cleaned)
 
+
+    @staticmethod
+    def is_valid_hostname(hostname: str) -> bool:
+        """Check if an IP address or hostname is valid for usage in the __init__ method.
+
+        Source: https://stackoverflow.com/a/2532344
+        """
+        if len(hostname) > 255:
+            return False
+        try:
+            ipaddress.ip_address(hostname)
+            return True
+        except ValueError:
+            pass
+
+        if hostname[-1] == ".":
+            hostname = hostname[:-1] # strip exactly one dot from the right, if present
+        allowed = re.compile(r"(?!-)[A-Z\d-]{1,63}(?<!-)$", re.IGNORECASE)
+        return all(allowed.match(x) for x in hostname.split("."))
 
     @staticmethod
     def format_mac(mac_address: bytes) -> str:
@@ -74,9 +97,20 @@ class WolClient:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         magic = b"\xff" * 6 + self.mac_address * 16
-        s.sendto(magic, ("<broadcast>", self.port))
+        s.sendto(magic, ((self.hostname or "<broadcast>"), self.port))
         s.close()
 
+
+    def get_subtitle(self) -> str:
+        """Get a readable subtitle for a WolClient, including the hostname/mac/port"""
+        subtitle = self.get_mac_address()
+
+        if self.hostname:
+            subtitle += f" ({self.hostname}:{self.port})"
+        elif self.port != 7:
+            subtitle += f" ({_('Port')} {self.port})"
+
+        return subtitle
 
     def __eq__(self, other):
         return self.mac_address == other.mac_address
@@ -86,5 +120,6 @@ class WolClient:
         return json.dumps({
             'mac_address': self.get_mac_address(),
             'name': self.name,
-            'port': self.port
+            'port': self.port,
+            'hostname': self.hostname
         })

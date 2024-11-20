@@ -31,6 +31,7 @@ class AddDialogBox(Adw.Dialog):
 
     header: Adw.HeaderBar = Gtk.Template.Child()
     name_entry: Adw.EntryRow = Gtk.Template.Child()
+    hostname_entry: Adw.EntryRow = Gtk.Template.Child()
     mac_entry: Adw.EntryRow = Gtk.Template.Child()
     port_entry: Adw.SpinRow = Gtk.Template.Child()
     add_button: Gtk.Button = Gtk.Template.Child()
@@ -56,10 +57,11 @@ class AddDialogBox(Adw.Dialog):
 
         self.name_entry.connect('changed', lambda _: self.validate_entry())
         self.mac_entry.connect('changed', lambda _: self.validate_entry())
+        self.hostname_entry.connect('changed', lambda _: self.validate_entry())
 
         self.name_entry.connect('apply', lambda _: add_if_valid())
         self.mac_entry.connect('apply', lambda _: add_if_valid())
-        self.name_entry.connect('apply', lambda _: add_if_valid())
+        self.hostname_entry.connect('apply', lambda _: add_if_valid())
 
         self.content.get_style_context().add_class('boxed-list')
 
@@ -68,11 +70,14 @@ class AddDialogBox(Adw.Dialog):
         """Return a new WolClient object with the data from the dialog."""
         return WolClient(mac_address=self.mac_entry.get_text(),
                          name=self.name_entry.get_text(),
+                         hostname=(self.hostname_entry.get_text()),
                          port=self.port_entry.get_value())
 
     def is_valid_entry(self) -> bool:
         """Return True if the entry fields are valid."""
-        return self.name_entry.get_text() and WolClient.is_valid_mac_address(self.mac_entry.get_text())
+        return self.name_entry.get_text() and \
+            WolClient.is_valid_mac_address(self.mac_entry.get_text()) and \
+            (not self.hostname_entry.get_text() or WolClient.is_valid_hostname(self.hostname_entry.get_text()))
 
     def validate_entry(self):
         """Validate the entry fields and enable the add button if valid."""
