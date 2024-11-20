@@ -28,8 +28,9 @@ class WolClient:
     mac_address: bytes
     name: str
     port: int
+    ip_address: str = "<broadcast>"
 
-    def __init__(self, mac_address: Union[bytes, str], name: str, port: int = 7):
+    def __init__(self, mac_address: Union[bytes, str], name: str, port: int = 7, ip_address: str = None):
         if isinstance(mac_address, str):
             self.mac_address = bytes.fromhex(
                 ''.join(char for char in mac_address if char.isalnum())
@@ -53,6 +54,11 @@ class WolClient:
         cleaned = ''.join(char for char in mac_address if char.isalnum())
         return len(cleaned) == 12 and all(char in '0123456789abcdefABCDEF' for char in cleaned)
 
+
+    @staticmethod
+    def is_valid_ip_address(ip_address: str) -> bool:
+        """Check if an IP address is valid for usage in the __init__ method."""
+        return ip_address is None or all(0 <= int(octet) <= 255 for octet in ip_address.split('.'))
 
     @staticmethod
     def format_mac(mac_address: bytes) -> str:
