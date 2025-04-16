@@ -28,9 +28,9 @@ class WolClient:
     mac_address: bytes
     name: str
     port: int
-    ip_address: str = "<broadcast>"
+    hostname: str = "<broadcast>"
 
-    def __init__(self, mac_address: Union[bytes, str], name: str, port: int = 7, ip_address: str = None):
+    def __init__(self, mac_address: Union[bytes, str], name: str, port: int = 7, hostname: str = "<broadcast>"):
         if isinstance(mac_address, str):
             self.mac_address = bytes.fromhex(
                 ''.join(char for char in mac_address if char.isalnum())
@@ -40,6 +40,7 @@ class WolClient:
 
         self.name = name
         self.port = int(port)
+        self.hostname = hostname
 
 
     @staticmethod
@@ -56,9 +57,9 @@ class WolClient:
 
 
     @staticmethod
-    def is_valid_ip_address(ip_address: str) -> bool:
-        """Check if an IP address is valid for usage in the __init__ method."""
-        return ip_address is None or all(0 <= int(octet) <= 255 for octet in ip_address.split('.'))
+    def is_valid_hostname(hostname: str) -> bool:
+        """Check if an IP address or hostname is valid for usage in the __init__ method."""
+        return True # TODO
 
     @staticmethod
     def format_mac(mac_address: bytes) -> str:
@@ -80,7 +81,7 @@ class WolClient:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         magic = b"\xff" * 6 + self.mac_address * 16
-        s.sendto(magic, ("<broadcast>", self.port))
+        s.sendto(magic, ((self.hostname or "<broadcast>"), self.port))
         s.close()
 
 

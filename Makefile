@@ -1,3 +1,5 @@
+.PHONY: all test clean build
+
 # these are debug scripts and not meant to be published on Flathub
 
 # Application ID for the Flatpak package
