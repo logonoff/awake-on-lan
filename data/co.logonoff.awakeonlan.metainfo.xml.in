@@ -64,9 +64,7 @@
 	<releases>
 		<release version="0.5.0">
 			<description translate="no">
-				<p>
-
-				</p>
+				<p>Updated GNOME runtime to version 48</p>
 			</description>
 		</release>
 		<release version="0.4.0" date="2024-10-27">
