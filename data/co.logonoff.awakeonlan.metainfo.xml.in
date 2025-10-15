@@ -62,6 +62,11 @@
 	</provides>
 
 	<releases>
+		<release version="0.5.1" date="2025-10-15">
+			<description translate="no">
+				<p>Updated GNOME runtime to version 49</p>
+			</description>
+		</release>
 		<release version="0.5.0" date="2025-04-16">
 			<description translate="no">
 				<p>Updated GNOME runtime to version 48</p>
