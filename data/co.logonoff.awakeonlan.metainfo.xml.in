@@ -99,6 +99,9 @@
 		<color type="primary" scheme_preference="dark">#5a3232</color>
 	</branding>
 	<keywords>
+		<keyword>WOL</keyword>
+		<keyword>network wake</keyword>
+		<keyword>remote wake</keyword>
 		<keyword>wake on lan</keyword>
 		<keyword>remote computer wake up</keyword>
 		<keyword>lan wake up software</keyword>
