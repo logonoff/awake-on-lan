@@ -1,9 +1,9 @@
 class Awakeonlan < Formula
   desc "Simple libadwaita-based Wake on LAN application for waking computers remotely"
   homepage "https://github.com/logonoff/awake-on-lan"
-  version "0.0.0"
+  version "0.5.2"
   url "https://github.com/logonoff/awake-on-lan/releases/download/#{version}/awakeonlan-#{version}.tar.xz"
-  sha256 "0000000000000000000000000000000000000000000000000000000000000000"
+  sha256 "cf9b0a2c26e19162619d32342887abe67fa48e762419fcdae5f55a62c22e051f"
   license "GPL-3.0-or-later"
 
   depends_on "desktop-file-utils" => :build
