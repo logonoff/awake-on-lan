@@ -59,7 +59,6 @@ jobs:
           {
             echo 'notes<<EOF'
             git log --oneline --no-decorate "$PREVIOUS_TAG..HEAD" \
-              | grep -v '^[a-f0-9]\+ chore' \
               | sed 's/^\([a-f0-9]\+\) \(.*\)/- \2 (\1)/' \
               || echo "- Initial release"
             echo 'EOF'
