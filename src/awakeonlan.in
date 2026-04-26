@@ -31,8 +31,11 @@ localedir = '@localedir@'
 
 sys.path.insert(1, pkgdatadir)
 signal.signal(signal.SIGINT, signal.SIG_DFL)
-locale.bindtextdomain('awakeonlan', localedir)
-locale.textdomain('awakeonlan')
+try:
+    locale.bindtextdomain('awakeonlan', localedir)
+    locale.textdomain('awakeonlan')
+except AttributeError:
+    pass
 gettext.install('awakeonlan', localedir)
 
 if __name__ == '__main__':

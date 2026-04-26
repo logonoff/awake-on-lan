@@ -18,6 +18,10 @@ class Awakeonlan < Formula
   depends_on "libadwaita"
   depends_on "python@3.13"
 
+  on_macos do
+    depends_on "gettext"
+  end
+
   def install
     system "meson", "setup", "build", *std_meson_args
     system "meson", "compile", "-C", "build", "--verbose"
