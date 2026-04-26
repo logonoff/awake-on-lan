@@ -1,0 +1,124 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y meson ninja-build gettext appstream desktop-file-utils libglib2.0-dev
+
+      - name: Get version from tag
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Create source tarball
+        run: |
+          meson setup build
+          meson dist -C build --no-tests --include-subprojects
+
+          # Find the generated tarball
+          TARBALL=$(ls build/meson-dist/*.tar.xz)
+
+          # Rename to standard format
+          mv "$TARBALL" "awakeonlan-${{ steps.version.outputs.version }}.tar.xz"
+
+      - name: Calculate SHA256
+        id: sha256
+        run: |
+          HASH=$(sha256sum awakeonlan-${{ steps.version.outputs.version }}.tar.xz | awk '{print $1}')
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
+          echo "SHA256: $HASH"
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          PREVIOUS_TAG=$(git tag --sort=-version:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | head -2 | tail -1)
+
+          if [ -z "$PREVIOUS_TAG" ]; then
+            PREVIOUS_TAG=$(git rev-list --max-parents=0 HEAD)
+          fi
+
+          echo "Comparing $PREVIOUS_TAG..HEAD"
+
+          {
+            echo 'notes<<EOF'
+            git log --oneline --no-decorate "$PREVIOUS_TAG..HEAD" \
+              | grep -v '^[a-f0-9]\+ chore' \
+              | sed 's/^\([a-f0-9]\+\) \(.*\)/- \2 (\1)/' \
+              || echo "- Initial release"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create ${{ steps.version.outputs.version }} \
+            awakeonlan-${{ steps.version.outputs.version }}.tar.xz \
+            --title "Awake on LAN ${{ steps.version.outputs.version }}" \
+            --notes "${{ steps.release_notes.outputs.notes }}"
+
+      - name: Update Homebrew formula
+        run: |
+          sed -i "s/version \".*\"/version \"${{ steps.version.outputs.version }}\"/" Formula/awakeonlan.rb
+          sed -i "s/sha256 \".*\"/sha256 \"${{ steps.sha256.outputs.hash }}\"/" Formula/awakeonlan.rb
+          CONTENT=$(base64 -w 0 < Formula/awakeonlan.rb)
+          MAIN_OID=$(gh api graphql -f query='{ repository(owner:"logonoff", name:"awake-on-lan") { ref(qualifiedName:"refs/heads/main") { target { oid } } } }' --jq '.data.repository.ref.target.oid')
+          jq -n \
+            --arg oid "$MAIN_OID" \
+            --arg content "$CONTENT" \
+            --arg version "${{ steps.version.outputs.version }}" \
+            '{
+              query: "mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid } } }",
+              variables: {
+                input: {
+                  branch: { repositoryNameWithOwner: "logonoff/awake-on-lan", branchName: "main" },
+                  expectedHeadOid: $oid,
+                  message: { headline: ("chore: update formula to " + $version) },
+                  fileChanges: { additions: [{ path: "Formula/awakeonlan.rb", contents: $content }] }
+                }
+              }
+            }' | gh api graphql --input -
+          git checkout -- Formula/awakeonlan.rb
+          git pull --ff-only origin main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync homebrew-bucket
+        run: |
+          gh api repos/logonoff/homebrew-bucket/dispatches \
+            -f event_type=sync
+        env:
+          GH_TOKEN: ${{ secrets.BUCKET_PAT }}
+
+      - name: Check if next branch can be fast-forwarded
+        id: check-next
+        run: |
+          if git ls-remote --exit-code origin next &>/dev/null; then
+            git fetch origin next
+            if git merge-base --is-ancestor origin/next HEAD; then
+              echo "can_ff=true" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
+      - name: Fast-forward next branch
+        if: steps.check-next.outputs.can_ff == 'true'
+        run: git push origin HEAD:next
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
