@@ -24,6 +24,7 @@ gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
 from gi.repository import Gtk, Gio, Adw
+Adw.init() # needed for windows for some reason, otherwise no adwaita styles load
 from .window import awakeonlanWindow
 
 
@@ -32,8 +33,11 @@ class awakeonlanApplication(Adw.Application):
     version: str
 
     def __init__(self, version: str = '0.0.0'):
+        flags = Gio.ApplicationFlags.DEFAULT_FLAGS
+        if sys.platform == 'win32':
+            flags |= Gio.ApplicationFlags.NON_UNIQUE
         super().__init__(application_id='co.logonoff.awakeonlan',
-                         flags=Gio.ApplicationFlags.DEFAULT_FLAGS)
+                         flags=flags)
         self.version = version
         self.create_action('quit', lambda *_: self.quit(), ['<primary>q', '<primary>w'])
         self.create_action('about', self.on_about_action)

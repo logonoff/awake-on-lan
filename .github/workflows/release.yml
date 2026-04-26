@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tarball-hash: ${{ steps.sha256.outputs.hash }}
 
     steps:
       - name: Checkout repository
@@ -32,10 +35,7 @@ jobs:
           meson setup build
           meson dist -C build --no-tests --include-subprojects
 
-          # Find the generated tarball
           TARBALL=$(ls build/meson-dist/*.tar.xz)
-
-          # Rename to standard format
           mv "$TARBALL" "awakeonlan-${{ steps.version.outputs.version }}.tar.xz"
 
       - name: Calculate SHA256
@@ -73,31 +73,159 @@ jobs:
             --title "Awake on LAN ${{ steps.version.outputs.version }}" \
             --notes "${{ steps.release_notes.outputs.notes }}"
 
-      - name: Update Homebrew formula
+  windows-build:
+    runs-on: windows-latest
+    needs: release
+    permissions:
+      contents: write
+    outputs:
+      hash: ${{ steps.sha256.outputs.hash }}
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          cache: true
+          install: >-
+            mingw-w64-ucrt-x86_64-gtk4
+            mingw-w64-ucrt-x86_64-libadwaita
+            mingw-w64-ucrt-x86_64-python
+            mingw-w64-ucrt-x86_64-python-gobject
+            mingw-w64-ucrt-x86_64-python-pip
+            mingw-w64-ucrt-x86_64-glib2
+            mingw-w64-ucrt-x86_64-pyinstaller
+            mingw-w64-ucrt-x86_64-pyinstaller-hooks-contrib
+            mingw-w64-ucrt-x86_64-adwaita-icon-theme
+            mingw-w64-ucrt-x86_64-gsettings-desktop-schemas
+            mingw-w64-ucrt-x86_64-imagemagick
+
+      - name: Convert icon to .ico
         run: |
-          sed -i "s/version \".*\"/version \"${{ steps.version.outputs.version }}\"/" Formula/awakeonlan.rb
-          sed -i "s/sha256 \".*\"/sha256 \"${{ steps.sha256.outputs.hash }}\"/" Formula/awakeonlan.rb
-          CONTENT=$(base64 -w 0 < Formula/awakeonlan.rb)
+          magick -background none data/icons/hicolor/scalable/apps/co.logonoff.awakeonlan.svg \
+            -define icon:auto-resize=256,128,64,48,32,16 \
+            awakeonlan.ico
+
+      - name: Prepare entry point
+        run: |
+          VERSION=${{ needs.release.outputs.version }}
+          sed -i "s|@PYTHON@|/usr/bin/python3|" src/awakeonlan.in
+          sed -i "s|@VERSION@|$VERSION|" src/awakeonlan.in
+          sed -i "s|@pkgdatadir@|.|" src/awakeonlan.in
+          sed -i "s|@localedir@|./locale|" src/awakeonlan.in
+
+      - name: Compile GResources
+        run: |
+          cp data/co.logonoff.awakeonlan.metainfo.xml.in data/co.logonoff.awakeonlan.metainfo.xml
+          cd src
+          glib-compile-resources --sourcedir=. --sourcedir=.. awakeonlan.gresource.xml --target=awakeonlan.gresource
+
+      - name: Compile GSettings schemas
+        run: glib-compile-schemas data/
+
+      - name: Build with PyInstaller
+        run: pyinstaller awakeonlan.spec
+
+      - name: Bundle additional resources
+        run: |
+          MSYS_ROOT="/$MSYSTEM"
+
+          # Win32 typelibs into PyInstaller's typelib directory
+          cp $MSYS_ROOT/lib/girepository-1.0/GioWin32-*.typelib dist/awakeonlan/_internal/gi_typelibs/
+          cp $MSYS_ROOT/lib/girepository-1.0/GLibWin32-*.typelib dist/awakeonlan/_internal/gi_typelibs/
+          cp $MSYS_ROOT/lib/girepository-1.0/GdkWin32-*.typelib dist/awakeonlan/_internal/gi_typelibs/
+
+          # GSettings schemas: combine app + MSYS2 schemas and compile together
+          mkdir -p dist/awakeonlan/share/glib-2.0/schemas
+          cp $MSYS_ROOT/share/glib-2.0/schemas/*.xml dist/awakeonlan/share/glib-2.0/schemas/ || true
+          cp data/co.logonoff.awakeonlan.gschema.xml dist/awakeonlan/share/glib-2.0/schemas/
+          glib-compile-schemas dist/awakeonlan/share/glib-2.0/schemas/
+
+          # Icon themes
+          mkdir -p dist/awakeonlan/share/icons
+          cp -r $MSYS_ROOT/share/icons/Adwaita dist/awakeonlan/share/icons/ || true
+          cp -r $MSYS_ROOT/share/icons/hicolor dist/awakeonlan/share/icons/ || true
+
+          # App icon — add to _internal Adwaita theme (where GTK looks)
+          mkdir -p dist/awakeonlan/_internal/share/icons/Adwaita/scalable/apps
+          cp data/icons/hicolor/scalable/apps/co.logonoff.awakeonlan.svg dist/awakeonlan/_internal/share/icons/Adwaita/scalable/apps/
+          mkdir -p dist/awakeonlan/_internal/share/icons/Adwaita/symbolic/apps
+          cp data/icons/hicolor/symbolic/apps/co.logonoff.awakeonlan-symbolic.svg dist/awakeonlan/_internal/share/icons/Adwaita/symbolic/apps/
+          rm -f dist/awakeonlan/_internal/share/icons/Adwaita/icon-theme.cache
+
+      - name: Create ZIP archive
+        shell: pwsh
+        run: Compress-Archive -Path dist/awakeonlan -DestinationPath awakeonlan-${{ needs.release.outputs.version }}-windows-x86_64.zip
+
+      - name: Calculate SHA256
+        id: sha256
+        shell: pwsh
+        run: |
+          $hash = (Get-FileHash awakeonlan-${{ needs.release.outputs.version }}-windows-x86_64.zip -Algorithm SHA256).Hash.ToLower()
+          echo "hash=$hash" >> $env:GITHUB_OUTPUT
+
+      - name: Upload to release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload ${{ needs.release.outputs.version }} awakeonlan-${{ needs.release.outputs.version }}-windows-x86_64.zip
+
+  update-manifests:
+    runs-on: ubuntu-latest
+    needs: [release, windows-build]
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Update manifests
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=${{ needs.release.outputs.version }}
+          TARBALL_HASH=${{ needs.release.outputs.tarball-hash }}
+          WINDOWS_HASH=${{ needs.windows-build.outputs.hash }}
+
+          # Update Homebrew formula
+          sed -i "s/version \".*\"/version \"$VERSION\"/" Formula/awakeonlan.rb
+          sed -i "s/sha256 \".*\"/sha256 \"$TARBALL_HASH\"/" Formula/awakeonlan.rb
+
+          # Update Scoop manifest
+          sed -i "s/\"version\": \".*\"/\"version\": \"$VERSION\"/" bucket/awakeonlan.json
+          sed -i "s|download/.*/awakeonlan-.*-windows-x86_64.zip|download/${VERSION}/awakeonlan-${VERSION}-windows-x86_64.zip|" bucket/awakeonlan.json
+          sed -i "s/\"hash\": \".*\"/\"hash\": \"$WINDOWS_HASH\"/" bucket/awakeonlan.json
+
+          FORMULA_CONTENT=$(base64 -w 0 < Formula/awakeonlan.rb)
+          SCOOP_CONTENT=$(base64 -w 0 < bucket/awakeonlan.json)
           MAIN_OID=$(gh api graphql -f query='{ repository(owner:"logonoff", name:"awake-on-lan") { ref(qualifiedName:"refs/heads/main") { target { oid } } } }' --jq '.data.repository.ref.target.oid')
+
           jq -n \
             --arg oid "$MAIN_OID" \
-            --arg content "$CONTENT" \
-            --arg version "${{ steps.version.outputs.version }}" \
+            --arg formula "$FORMULA_CONTENT" \
+            --arg scoop "$SCOOP_CONTENT" \
+            --arg version "$VERSION" \
             '{
               query: "mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid } } }",
               variables: {
                 input: {
                   branch: { repositoryNameWithOwner: "logonoff/awake-on-lan", branchName: "main" },
                   expectedHeadOid: $oid,
-                  message: { headline: ("chore: update formula to " + $version) },
-                  fileChanges: { additions: [{ path: "Formula/awakeonlan.rb", contents: $content }] }
+                  message: { headline: ("chore: update manifests to " + $version) },
+                  fileChanges: { additions: [
+                    { path: "Formula/awakeonlan.rb", contents: $formula },
+                    { path: "bucket/awakeonlan.json", contents: $scoop }
+                  ] }
                 }
               }
             }' | gh api graphql --input -
-          git checkout -- Formula/awakeonlan.rb
-          git pull --ff-only origin main
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sync homebrew-bucket
         run: |
@@ -108,16 +236,18 @@ jobs:
 
       - name: Check if next branch can be fast-forwarded
         id: check-next
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if git ls-remote --exit-code origin next &>/dev/null; then
-            git fetch origin next
-            if git merge-base --is-ancestor origin/next HEAD; then
+            git fetch origin next main
+            if git merge-base --is-ancestor origin/next origin/main; then
               echo "can_ff=true" >> "$GITHUB_OUTPUT"
             fi
           fi
 
       - name: Fast-forward next branch
         if: steps.check-next.outputs.can_ff == 'true'
-        run: git push origin HEAD:next
+        run: git push origin origin/main:next
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

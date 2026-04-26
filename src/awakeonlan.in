@@ -29,6 +29,10 @@ VERSION = '@VERSION@'
 pkgdatadir = '@pkgdatadir@'
 localedir = '@localedir@'
 
+if getattr(sys, 'frozen', False):
+    pkgdatadir = sys._MEIPASS
+    localedir = os.path.join(sys._MEIPASS, 'locale')
+
 sys.path.insert(1, pkgdatadir)
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 try:

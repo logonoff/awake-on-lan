@@ -18,6 +18,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
+import sys
 from gi.repository import Adw
 from gi.repository import Gtk
 from .add_dialog import AddDialogBox
@@ -41,9 +42,12 @@ class awakeonlanWindow(Adw.ApplicationWindow):
 
         self.set_title(_('Awake on LAN'))
 
-        XDG_CONFIG_HOME = os.getenv('XDG_CONFIG_HOME', os.path.expanduser('~/.config'))
+        if sys.platform == 'win32':
+            config_home = os.getenv('APPDATA', os.path.expanduser('~'))
+        else:
+            config_home = os.getenv('XDG_CONFIG_HOME', os.path.expanduser('~/.config'))
 
-        self.wol_clients = SettingsManager(base_path=XDG_CONFIG_HOME, version=self.get_application().version)
+        self.wol_clients = SettingsManager(base_path=config_home, version=self.get_application().version)
         self.wol_clients.load_settings()
 
         self.get_application().create_action(
