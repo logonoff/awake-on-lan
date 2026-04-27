@@ -52,9 +52,8 @@ class awakeonlanApplication(Adw.Application):
 
     def on_about_action(self, widget, _):
         """Callback for the app.about action."""
-        about = Adw.AboutWindow.new_from_appdata(f'{self.get_resource_base_path()}/metainfo', self.version)
-        about.set_transient_for(self.props.active_window)
-        about.present()
+        about = Adw.AboutDialog.new_from_appdata(f'{self.get_resource_base_path()}/metainfo', self.version)
+        about.present(self.props.active_window)
 
     def on_preferences_action(self, widget, _):
         """Callback for the app.preferences action."""
