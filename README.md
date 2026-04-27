@@ -28,5 +28,15 @@ On macOS, you can install Awake on LAN using Homebrew:
 brew install logonoff/bucket/awakeonlan
 ```
 
+### Windows
+
+Awake on LAN is distributed on scoop:
+
+```powershell
+scoop bucket add logonoff https://github.com/logonoff/homebrew-bucket
+scoop install logonoff/awakeonlan
+```
+
 ## Contributions
+
 Contributions are welcome! This project is open to anyone who wants to contribute and make it better. If you have any suggestions, bug reports, etc., please open an issue or a pull request :)
