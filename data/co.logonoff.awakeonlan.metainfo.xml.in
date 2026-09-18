@@ -64,7 +64,7 @@
 	<releases>
 		<release version="0.6.0" date="2026-09-17">
 			<description translate="no">
-				<p>Added support for sending WOL packets to a hostname</p>
+				<p>Added support for sending WOL packets to a hostname, updated GNOME runtime to version 51</p>
 			</description>
 		</release>
 		<release version="0.5.2" date="2026-04-25">
