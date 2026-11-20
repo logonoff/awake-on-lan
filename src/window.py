@@ -19,7 +19,9 @@
 
 import os
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from gi.repository import Adw
+from gi.repository import GLib
 from gi.repository import Gtk
 from .add_dialog import AddDialogBox
 from .settings_manager import SettingsManager
@@ -29,6 +31,13 @@ from .wol_client import WolClient
 class awakeonlanWindow(Adw.ApplicationWindow):
     """Main application window."""
     __gtype_name__ = 'awakeonlanWindow'
+
+    # How often the online status of the remotes is refreshed, in seconds
+    STATUS_INTERVAL = 5
+    # How long to wait for a single ICMP reply, in seconds
+    STATUS_TIMEOUT = 1.0
+    # Possible states of the status dot
+    STATUS_STATES = ('online', 'offline', 'checking', 'unknown')
 
     add_button: Gtk.Button = Gtk.Template.Child()
     remotes_list: Gtk.ListBox = Gtk.Template.Child()
@@ -50,6 +59,12 @@ class awakeonlanWindow(Adw.ApplicationWindow):
         self.wol_clients = SettingsManager(base_path=config_home, version=self.get_application().version)
         self.wol_clients.load_settings()
 
+        self._executor = ThreadPoolExecutor(
+            max_workers=4, thread_name_prefix='awakeonlan-status'
+        )
+        self._status_timeout_id = 0
+        self._pending_checks = set()
+
         self.get_application().create_action(
             'add', lambda *_: self.spawn_add_remote_dialog(None), ['<primary>n']
         )
@@ -62,6 +77,85 @@ class awakeonlanWindow(Adw.ApplicationWindow):
             self._add_wol_client_to_list(client)
 
         self._show_no_items(not self.wol_clients.wol_clients)
+
+        self._refresh_status()
+        self._start_status_timer()
+        self.connect('close-request', self._on_close_request)
+
+
+    def _start_status_timer(self):
+        """Start or restart the periodic status refresh."""
+        if self._status_timeout_id:
+            GLib.source_remove(self._status_timeout_id)
+        self._status_timeout_id = GLib.timeout_add_seconds(
+            self.STATUS_INTERVAL, self._refresh_status
+        )
+
+
+    def _on_close_request(self, _window) -> bool:
+        """Stop the status polling when the window is closed."""
+        if self._status_timeout_id:
+            GLib.source_remove(self._status_timeout_id)
+            self._status_timeout_id = 0
+        self._executor.shutdown(wait=False, cancel_futures=True)
+        return False
+
+
+    def _refresh_status(self) -> bool:
+        """Check the online status of all remotes in the background."""
+        row = self.remotes_list.get_first_child()
+        while row is not None:
+            client = getattr(row, '_wol_client', None)
+            dot = getattr(row, '_status_dot', None)
+            if (client is not None and dot is not None and client.hostname
+                    and dot not in self._pending_checks):
+                self._pending_checks.add(dot)
+                self._executor.submit(self._check_status, client, dot)
+            row = row.get_next_sibling()
+        return GLib.SOURCE_CONTINUE
+
+
+    def _check_status(self, client, dot):
+        """Probe a single remote; runs in a worker thread."""
+        online = False
+        try:
+            online = client.is_online(timeout=self.STATUS_TIMEOUT)
+        finally:
+            self._pending_checks.discard(dot)
+        GLib.idle_add(self._set_status, dot, online)
+
+
+    def _set_status(self, dot, online: bool) -> bool:
+        """Update the status dot of a remote; runs on the main loop."""
+        if dot.get_root() is None:
+            return GLib.SOURCE_REMOVE
+        self._set_dot_state(dot, 'online' if online else 'offline')
+        return GLib.SOURCE_REMOVE
+
+
+    def _set_dot_state(self, dot, state: str):
+        """Set the state of a status dot: online, offline, checking or unknown."""
+        context = dot.get_style_context()
+        for name in self.STATUS_STATES:
+            context.remove_class(name)
+        context.add_class(state)
+        if state == 'online':
+            dot.set_tooltip_text(_('Online'))
+        elif state == 'offline':
+            dot.set_tooltip_text(_('Offline'))
+        elif state == 'checking':
+            dot.set_tooltip_text(_('Checking...'))
+        else:
+            dot.set_tooltip_text(_('Status not available: no hostname set'))
+
+
+    def _reset_status_dot(self, row):
+        """Reset the status dot of a row after its hostname changed."""
+        client = row._wol_client
+        self._set_dot_state(
+            row._status_dot, 'checking' if client.hostname else 'unknown'
+        )
+        self._refresh_status()
 
 
     def _show_no_items(self, show: bool):
@@ -83,6 +177,17 @@ class awakeonlanWindow(Adw.ApplicationWindow):
         new_row.set_subtitle(wol_client.get_subtitle())
         new_row.get_style_context().add_class('AdwActionRow')
         new_row.set_activatable(True)
+        new_row._wol_client = wol_client
+
+        # online status indicator, only meaningful with a hostname to ping
+        status_dot = Gtk.Box()
+        status_dot.set_valign(Gtk.Align.CENTER)
+        status_dot.get_style_context().add_class('status-dot')
+        self._set_dot_state(
+            status_dot, 'checking' if wol_client.hostname else 'unknown'
+        )
+        new_row.add_prefix(status_dot)
+        new_row._status_dot = status_dot
 
         # kebab button (edit)
         kebab_button = Gtk.Button.new_from_icon_name('view-more')
@@ -133,11 +238,13 @@ class awakeonlanWindow(Adw.ApplicationWindow):
                 client.name, client.mac_address, client.port, client.hostname = old_name, old_mac, old_port, old_hostname
                 new_row.set_title(old_name)
                 new_row.set_subtitle(client.get_subtitle())
+                self._reset_status_dot(new_row)
                 self.wol_clients.save_settings()
 
             client.name, client.mac_address, client.port, client.hostname = edited_client.name, edited_client.mac_address, edited_client.port, edited_client.hostname
             new_row.set_title(client.name)
             new_row.set_subtitle(client.get_subtitle())
+            self._reset_status_dot(new_row)
             self.wol_clients.save_settings()
 
             edited_toast = Adw.Toast.new(_('{name} edited').format(name=client.name))
