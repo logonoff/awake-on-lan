@@ -23,7 +23,7 @@ import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
-from gi.repository import Gtk, Gio, Adw
+from gi.repository import Gtk, Gdk, Gio, Adw
 Adw.init() # needed for windows for some reason, otherwise no adwaita styles load
 from .window import awakeonlanWindow
 
@@ -31,6 +31,7 @@ from .window import awakeonlanWindow
 class awakeonlanApplication(Adw.Application):
     """The main application singleton class."""
     version: str
+    css_loaded = False
 
     def __init__(self, version: str = '0.0.0'):
         flags = Gio.ApplicationFlags.DEFAULT_FLAGS
@@ -49,10 +50,21 @@ class awakeonlanApplication(Adw.Application):
         We raise the application's main window, creating it if
         necessary.
         """
+        if not self.css_loaded:
+            self.load_styles()
+            self.css_loaded = True
         win = self.props.active_window
         if not win:
             win = awakeonlanWindow(application=self)
         win.present()
+
+    def load_styles(self):
+        """Load the application CSS on top of the system theme."""
+        provider = Gtk.CssProvider()
+        provider.load_from_resource(f'{self.get_resource_base_path()}/style.css')
+        Gtk.StyleContext.add_provider_for_display(
+            Gdk.Display.get_default(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
 
     def on_about_action(self, widget, _):
         """Callback for the app.about action."""

@@ -17,9 +17,13 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import os
 import re
+import select
 import socket
+import struct
 import json
+import time
 import ipaddress
 from typing import Union
 
@@ -99,6 +103,56 @@ class WolClient:
         magic = b"\xff" * 6 + self.mac_address * 16
         s.sendto(magic, ((self.hostname or "<broadcast>"), self.port))
         s.close()
+
+
+    @staticmethod
+    def _checksum(data: bytes) -> int:
+        """Compute the RFC 1071 Internet checksum of the given data."""
+        if len(data) % 2:
+            data += b"\x00"
+        total = sum(struct.unpack(f"!{len(data) // 2}H", data))
+        total = (total >> 16) + (total & 0xffff)
+        total += total >> 16
+        return ~total & 0xffff
+
+
+    def is_online(self, timeout: float = 1.0) -> bool:
+        """Check whether the remote answers ICMP echo requests within the timeout."""
+        if not self.hostname:
+            return False
+
+        try:
+            addresses = socket.getaddrinfo(self.hostname, None, socket.AF_INET)
+        except OSError:
+            return False
+        if not addresses:
+            return False
+        address = addresses[0][4][0]
+
+        identifier = os.getpid() & 0xffff
+        header = struct.pack("!BBHHH", 8, 0, 0, identifier, 1)
+        packet = struct.pack("!BBHHH", 8, 0, WolClient._checksum(header), identifier, 1)
+
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_ICMP) as sock:
+                sock.sendto(packet, (address, 0))
+                deadline = time.monotonic() + timeout
+                while True:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        return False
+                    readable, _, _ = select.select([sock], [], [], remaining)
+                    if not readable:
+                        return False
+                    data, _ = sock.recvfrom(1024)
+                    if not data:
+                        continue
+                    # some kernels prepend the IPv4 header
+                    offset = 20 if len(data) >= 28 and data[0] >> 4 == 4 else 0
+                    if data[offset] == 0:  # ICMP echo reply
+                        return True
+        except OSError:
+            return False
 
 
     def get_subtitle(self) -> str:

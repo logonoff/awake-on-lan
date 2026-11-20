@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: co.logonoff.awakeonlan\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-17 21:07-0400\n"
+"POT-Creation-Date: 2026-11-20 19:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: data/co.logonoff.awakeonlan.desktop.in:2
-#: data/co.logonoff.awakeonlan.metainfo.xml.in:6 src/window.py:44
+#: data/co.logonoff.awakeonlan.metainfo.xml.in:6 src/window.py:50
 msgid "Awake on LAN"
 msgstr ""
 
@@ -76,42 +76,54 @@ msgstr ""
 msgid "lan wake up software"
 msgstr ""
 
-#: src/window.py:90
+#: src/window.py:126
+msgid "Online"
+msgstr ""
+
+#: src/window.py:126
+msgid "Offline"
+msgstr ""
+
+#: src/window.py:162
+msgid "Checking..."
+msgstr ""
+
+#: src/window.py:168
 msgid "Edit"
 msgstr ""
 
-#: src/window.py:100
+#: src/window.py:178
 msgid "Start"
 msgstr ""
 
-#: src/window.py:103
+#: src/window.py:181
 #, python-brace-format
 msgid "Sent magic packet to {name}"
 msgstr ""
 
-#: src/window.py:121
+#: src/window.py:199
 msgid "Remote added"
 msgstr ""
 
-#: src/window.py:144
+#: src/window.py:224
 #, python-brace-format
 msgid "{name} edited"
 msgstr ""
 
-#: src/window.py:145 src/window.py:158
+#: src/window.py:225 src/window.py:238
 msgid "Undo"
 msgstr ""
 
-#: src/window.py:152 src/window.py:177
+#: src/window.py:232 src/window.py:257
 msgid "Delete"
 msgstr ""
 
-#: src/window.py:157
+#: src/window.py:237
 #, python-brace-format
 msgid "{name} removed"
 msgstr ""
 
-#: src/window.py:182
+#: src/window.py:262
 msgid "Edit Remote"
 msgstr ""
 
